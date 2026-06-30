@@ -224,6 +224,7 @@ export default function App(){
   const [backTop, setBackTop] = useState(false);
   const [form, setForm] = useState({ name: "", phone: "", email: "", country: "", visa: "", msg: "" });
   const [sent, setSent] = useState(false);
+  const [storyIdx, setStoryIdx] = useState(0);
   const { scrollYProgress } = useScroll();
   const heroY = useTransform(scrollYProgress, [0, 0.35], [0, -70]);
   const heroOp = useTransform(scrollYProgress, [0, 0.4], [1, 0]);
@@ -232,6 +233,11 @@ export default function App(){
     const fn = () => { setScrolled(window.scrollY > 60); setBackTop(window.scrollY > 400); };
     window.addEventListener("scroll", fn);
     return () => window.removeEventListener("scroll", fn);
+  }, []);
+
+  useEffect(() => {
+    const t = setInterval(() => setStoryIdx((i) => (i + 1) % TESTIMONIALS.length), 4000);
+    return () => clearInterval(t);
   }, []);
 
   const go = (id) => { document.getElementById(id)?.scrollIntoView({ behavior: "smooth" }); setMenuOpen(false); };
@@ -346,15 +352,33 @@ export default function App(){
                 <img src={LOGO} alt="Visa Buddies" style={{ width: "100%", marginBottom: 20, filter: "drop-shadow(0 4px 16px rgba(200,155,60,0.3))" }} />
                 <div style={{ ...SH, textAlign: "center", color: C.gold, fontSize: 11, fontWeight: 700, letterSpacing: "2px", marginBottom: 4 }}>YOUR DREAM. OUR PLAN.</div>
                 <div style={{ ...SH, textAlign: "center", color: C.goldL, fontSize: 10, letterSpacing: "2px" }}>BETTER FUTURE.</div>
-                <div style={{ marginTop: 20, display: "flex", flexDirection: "column", gap: 8 }}>
-                  {[{ f: "🇨🇦", l: "Canada PR" }, { f: "🇦🇺", l: "Australia Visa" }, { f: "🇳🇿", l: "New Zealand Work" }].map((it) => (
-                    <motion.div key={it.l} whileHover={{ x: 4, background: `${C.gold}18` }} onClick={() => go("assessment")}
-                      style={{ display: "flex", alignItems: "center", gap: 10, padding: "10px 14px", background: `${C.gold}0C`, borderRadius: 10, cursor: "pointer", border: `1px solid ${C.gold}20` }}>
-                      <span style={{ fontSize: 18 }}>{it.f}</span>
-                      <span style={{ fontSize: 13, fontWeight: 600, color: C.goldL }}>{it.l}</span>
-                      <motion.span animate={{ x: [0, 4, 0] }} transition={{ duration: 1.5, repeat: Infinity }} style={{ marginLeft: "auto", color: C.gold }}>→</motion.span>
+                <div style={{ marginTop: 22, paddingTop: 18, borderTop: `1px solid ${C.gold}22` }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: 6, justifyContent: "center", marginBottom: 12 }}>
+                    <span style={{ width: 6, height: 6, borderRadius: "50%", background: "#3ED598", display: "inline-block", boxShadow: "0 0 8px #3ED598" }} />
+                    <span style={{ color: C.goldL, fontSize: 10, fontWeight: 700, letterSpacing: "1.5px" }}>RECENT SUCCESS STORY</span>
+                  </div>
+                  <AnimatePresence mode="wait">
+                    <motion.div key={storyIdx} initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -14 }} transition={{ duration: 0.5, ease: "easeOut" }}
+                      style={{ background: `${C.gold}0C`, border: `1px solid ${C.gold}20`, borderRadius: 14, padding: "16px 16px" }}>
+                      <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 10 }}>
+                        <div style={{ width: 34, height: 34, borderRadius: "50%", background: `linear-gradient(135deg,${C.gold},${C.goldL})`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 12, fontWeight: 700, color: C.navy, flexShrink: 0 }}>
+                          {TESTIMONIALS[storyIdx].av}
+                        </div>
+                        <div>
+                          <div style={{ fontSize: 13, fontWeight: 700, color: "white" }}>{TESTIMONIALS[storyIdx].name}</div>
+                          <div style={{ fontSize: 11, color: C.goldL }}>{TESTIMONIALS[storyIdx].visa}</div>
+                        </div>
+                      </div>
+                      <div style={{ fontSize: 12, color: "rgba(255,255,255,0.75)", lineHeight: 1.5 }}>
+                        "{TESTIMONIALS[storyIdx].text}"
+                      </div>
                     </motion.div>
-                  ))}
+                  </AnimatePresence>
+                  <div style={{ display: "flex", gap: 5, justifyContent: "center", marginTop: 12 }}>
+                    {TESTIMONIALS.map((_, i) => (
+                      <span key={i} style={{ width: i === storyIdx ? 16 : 6, height: 6, borderRadius: 99, background: i === storyIdx ? C.gold : `${C.gold}40`, transition: "all .3s" }} />
+                    ))}
+                  </div>
                 </div>
               </motion.div>
             </motion.div>
