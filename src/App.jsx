@@ -158,6 +158,7 @@ function Label({ children }) {
 
 // ── Data ───────────────────────────────────────────────────────
 const NAV = ["Home", "About Us", "Study Abroad", "Work Visa", "Tourist Visa", "Business Visa", "PR", "Success Stories", "Contact"];
+const NAV_TARGET = { "Study Abroad": "services", "Work Visa": "services", "Business Visa": "services", "PR": "services" };
 const SERVICES = [
   { icon: "🎓", title: "Student Visa", desc: "Expert guidance from university selection to visa approval." },
   { icon: "💼", title: "Work Visa", desc: "Work permit pathways for NZ, Australia, UK, Europe & more." },
@@ -185,7 +186,7 @@ const DESTINATIONS = [
 const TIMELINE = ["Free Consultation", "Profile Evaluation", "Document Preparation", "Application Submission", "Visa Filing", "Interview Guidance", "Visa Approval", "Fly Abroad 🎉"];
 const POPULAR_COUNTRIES = ["USA", "Canada", "UK", "Australia", "New Zealand"];
 const EUROPE_COUNTRIES = ["Germany", "Hungary", "Poland", "France", "Netherlands", "Ireland"];
-const VISA_TYPES = [{ v: "pr", l: "PR Visa" }, { v: "student", l: "Student Visa" }, { v: "work", l: "Work Permit" }, { v: "tourist", l: "Tourist Visa" }, { v: "other", l: "Other Visa" }];
+const VISA_TYPES = [{ v: "pr", l: "PR Visa" }, { v: "student", l: "Student Visa" }, { v: "work", l: "Work Permit" }, { v: "tourist", l: "Tourist Visa" }, { v: "business", l: "Business Visa" }, { v: "other", l: "Other Visa" }];
 
 const TESTIMONIALS = [
   { name: "Rahul Sharma", visa: "Canada Student Visa", av: "RS", text: "The entire process was smooth. VISA BUDDIES handled everything professionally." },
@@ -291,7 +292,7 @@ export default function App(){
           </motion.div>
           <div className="hide-mob" style={{ display: "flex", gap: 20, alignItems: "center", overflow: "hidden" }}>
             {["Home", "About Us", "Study Abroad", "Work Visa", "Tourist Visa", "Success Stories", "Contact"].map((l) => (
-              <span key={l} className="nav-a" onClick={() => go(l.toLowerCase().replace(/ /g, "-"))}>{l}</span>
+              <span key={l} className="nav-a" onClick={() => go(NAV_TARGET[l] || l.toLowerCase().replace(/ /g, "-"))}>{l}</span>
             ))}
           </div>
           <div className="hide-mob" style={{ display: "flex", gap: 10, alignItems: "center", flexShrink: 0 }}>
@@ -312,7 +313,7 @@ export default function App(){
           {menuOpen && (
             <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: "auto", opacity: 1 }} exit={{ height: 0, opacity: 0 }} transition={{ duration: 0.28 }}
               style={{ overflow: "hidden", background: "white", borderTop: `1px solid ${C.border}`, padding: "16px 24px", display: "flex", flexDirection: "column", gap: 16 }}>
-              {NAV.map((l) => <span key={l} className="nav-a" onClick={() => go(l.toLowerCase().replace(/ /g, "-"))}>{l}</span>)}
+              {NAV.map((l) => <span key={l} className="nav-a" onClick={() => go(NAV_TARGET[l] || l.toLowerCase().replace(/ /g, "-"))}>{l}</span>)}
             </motion.div>
           )}
         </AnimatePresence>
@@ -594,17 +595,17 @@ export default function App(){
           </Reveal>
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr 1fr", gap: 24 }} className="g4">
             {[
-              { id: "study-abroad", icon: "🎓", title: "Study Abroad", desc: "From shortlisting universities to securing your student visa, we guide you through every step — SOPs, LORs, financial documentation, and interview prep — for top study destinations including Canada, UK, Australia, and Europe." },
-              { id: "work-visa", icon: "💼", title: "Work Visa", desc: "Work permit pathways for skilled professionals heading to New Zealand, Australia, UK, Europe, and beyond — we handle job offer documentation, sponsorships, and application filing end-to-end." },
-              { id: "business-visa", icon: "🏢", title: "Business Visa", desc: "Whether you're attending a conference, exploring investment opportunities, or visiting business partners abroad, our team handles documentation and applications for business and investor visas across major economies." },
-              { id: "pr", icon: "🛂", title: "Permanent Residency (PR)", desc: "Settle abroad for good. We help you navigate points-based and employer-sponsored PR pathways for Canada, Australia, New Zealand, and the UK — from eligibility assessment to final approval." },
+              { key: "study-abroad", visa: "student", icon: "🎓", title: "Study Abroad", desc: "From shortlisting universities to securing your student visa, we guide you through every step — SOPs, LORs, financial documentation, and interview prep — for top study destinations including Canada, UK, Australia, and Europe." },
+              { key: "work-visa", visa: "work", icon: "💼", title: "Work Visa", desc: "Work permit pathways for skilled professionals heading to New Zealand, Australia, UK, Europe, and beyond — we handle job offer documentation, sponsorships, and application filing end-to-end." },
+              { key: "business-visa", visa: "business", icon: "🏢", title: "Business Visa", desc: "Whether you're attending a conference, exploring investment opportunities, or visiting business partners abroad, our team handles documentation and applications for business and investor visas across major economies." },
+              { key: "pr", visa: "pr", icon: "🛂", title: "Permanent Residency (PR)", desc: "Settle abroad for good. We help you navigate points-based and employer-sponsored PR pathways for Canada, Australia, New Zealand, and the UK — from eligibility assessment to final approval." },
             ].map((c, i) => (
-              <Reveal key={c.id} delay={i * 0.08}>
-                <div id={c.id} style={{ background: C.silver, borderRadius: 18, padding: 30, border: `1px solid ${C.border}`, height: "100%", scrollMarginTop: 90 }}>
+              <Reveal key={c.key} delay={i * 0.08}>
+                <div style={{ background: C.silver, borderRadius: 18, padding: 30, border: `1px solid ${C.border}`, height: "100%" }}>
                   <div style={{ fontSize: 38, marginBottom: 14 }}>{c.icon}</div>
                   <h3 style={{ ...SH, fontSize: 18, fontWeight: 800, color: C.navy, marginBottom: 10 }}>{c.title}</h3>
                   <p style={{ fontSize: 13.5, color: C.slate, lineHeight: 1.7, marginBottom: 18 }}>{c.desc}</p>
-                  <GoldBtn outline onClick={() => go("assessment")} style={{ fontSize: 13, padding: "9px 18px" }}>Get Started</GoldBtn>
+                  <GoldBtn outline onClick={() => { setForm((f) => ({ ...f, visa: c.visa })); go("assessment"); }} style={{ fontSize: 13, padding: "9px 18px" }}>Get Started</GoldBtn>
                 </div>
               </Reveal>
             ))}
@@ -794,7 +795,7 @@ export default function App(){
             </div>
             {[
               { t: "Quick Links", ls: [{ l: "About", id: "about-us" }, { l: "Services", id: "services" }, { l: "Countries", id: "tourist-visa" }] },
-              { t: "Services", ls: [{ l: "Study Visa", id: "study-abroad" }, { l: "Work Visa", id: "work-visa" }, { l: "Tourist Visa", id: "tourist-visa" }, { l: "Business Visa", id: "business-visa" }, { l: "PR", id: "pr" }] },
+              { t: "Services", ls: [{ l: "Study Visa", id: "services" }, { l: "Work Visa", id: "services" }, { l: "Tourist Visa", id: "tourist-visa" }, { l: "Business Visa", id: "services" }, { l: "PR", id: "services" }] },
             ].map((col) => (
               <div key={col.t}>
                 <div style={{ ...SH, fontWeight: 700, marginBottom: 18, fontSize: 14, color: C.gold, letterSpacing: "1px" }}>{col.t}</div>
