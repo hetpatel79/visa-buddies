@@ -366,7 +366,7 @@ export default function App(){
 
       {/* ── MARQUEE ── */}
       <div style={{ background: C.navy, padding: "3px 0", overflow: "hidden" }}>
-        <Marquee items={MARQUEE_ITEMS} speed={28} />
+        <Marquee items={MARQUEE_ITEMS} speed={14} />
       </div>
 
       {/* ── WHY VISA BUDDIES ── */}
@@ -640,7 +640,7 @@ export default function App(){
 
       {/* ── TRUST STRIP ── */}
       <div style={{ background: C.navy, padding: "24px", overflow: "hidden" }}>
-        <Marquee items={TRUST.map((t) => `✦ ${t}`)} speed={20} reverse />
+        <Marquee items={TRUST.map((t) => `✦ ${t}`)} speed={10} reverse />
       </div>
 
       {/* ── FOOTER ── */}
