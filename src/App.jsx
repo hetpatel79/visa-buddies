@@ -272,14 +272,31 @@ export default function App(){
         .nav-a{font-size:13px;font-weight:600;color:${C.navy};cursor:pointer;padding:4px 0;position:relative;transition:color .2s;white-space:nowrap;}
         .nav-a::after{content:'';position:absolute;bottom:-2px;left:0;width:0;height:2px;background:${C.gold};transition:width .25s;}
         .nav-a:hover{color:${C.gold};}.nav-a:hover::after{width:100%;}
+        .hero-glow{position:absolute;width:360px;height:360px;border-radius:999px;background:radial-gradient(circle,rgba(232,196,106,.24),rgba(200,155,60,.08) 45%,transparent 70%);filter:blur(10px);pointer-events:none;}
+        .hero-flight{position:absolute;right:8%;top:22%;width:190px;height:2px;background:linear-gradient(90deg,transparent,rgba(232,196,106,.75),transparent);transform:rotate(-18deg);opacity:.7;pointer-events:none;}
+        .hero-flight::after{content:'';position:absolute;right:0;top:-5px;width:12px;height:12px;border-top:2px solid ${C.goldL};border-right:2px solid ${C.goldL};transform:rotate(45deg);}
+        @media(max-width:1100px){
+          .hero-shell{padding:72px 32px!important;}
+          .hero-grid{grid-template-columns:minmax(0,1fr)!important;gap:52px!important;text-align:center;}
+          .hero-copy{max-width:760px!important;margin:0 auto;}
+          .hero-h{font-size:56px!important;}
+          .hero-sub{margin-left:auto!important;margin-right:auto!important;}
+          .hero-actions,.hero-trust{justify-content:center!important;}
+          .hero-story{max-width:520px!important;margin:0 auto!important;}
+        }
         @media(max-width:900px){
           .hide-mob{display:none!important;}
           .g2{grid-template-columns:minmax(0,1fr)!important;}
           .g3{grid-template-columns:minmax(0,1fr)!important;}
           .g4{grid-template-columns:minmax(0,1fr) minmax(0,1fr)!important;}
-          .hero-h{font-size:34px!important;}
-          .hf{flex-direction:column!important;gap:36px!important;}
-          .hero-story{order:-1;margin-bottom:8px;}
+          .hero-shell{padding:56px 20px 64px!important;}
+          .hero-h{font-size:40px!important;line-height:1.08!important;}
+          .hero-sub{font-size:17px!important;line-height:1.7!important;}
+          .hero-actions{display:grid!important;grid-template-columns:minmax(0,1fr)!important;width:100%;}
+          .hero-actions > *{width:100%!important;justify-content:center!important;}
+          .hero-story{width:100%!important;}
+          .hero-card{padding:28px!important;border-radius:22px!important;}
+          .hero-flight{display:none!important;}
         }
       `}</style>
 
@@ -319,72 +336,88 @@ export default function App(){
       </motion.nav>
 
       {/* ── HERO ── */}
-      <section id="home" style={{ position: "relative", minHeight: "100vh", display: "flex", alignItems: "center", background: `linear-gradient(160deg,${C.navy} 0%,#0D1F45 60%,#1A0A3C 100%)`, overflow: "hidden", paddingTop: 72 }}>
+      <section id="home" style={{ position: "relative", minHeight: "calc(100vh - 72px)", display: "flex", alignItems: "center", background: `linear-gradient(160deg,${C.navy} 0%,#0D1F45 60%,#1A0A3C 100%)`, overflow: "hidden", paddingTop: 72 }}>
         <div style={{ position: "absolute", inset: 0, backgroundImage: `url(${heroBg})`, backgroundSize: "cover", backgroundPosition: "center", opacity: 0.85 }} />
         <div style={{ position: "absolute", inset: 0, background: `linear-gradient(160deg,${C.navy}99 0%,#0D1F4580 60%,#1A0A3C99 100%)` }} />
         <Stars count={40} />
         <div style={{ position: "absolute", inset: 0, backgroundImage: `linear-gradient(${C.gold}06 1px,transparent 1px),linear-gradient(90deg,${C.gold}06 1px,transparent 1px)`, backgroundSize: "60px 60px", pointerEvents: "none" }} />
         <div style={{ position: "absolute", inset: 0, background: "radial-gradient(ellipse at 30% 50%,rgba(200,155,60,0.08) 0%,transparent 60%)", pointerEvents: "none" }} />
-        <motion.div style={{ maxWidth: 1100, margin: "0 auto", padding: "80px 24px", position: "relative", zIndex: 1, y: heroY, opacity: heroOp, width: "100%" }}>
-          <div style={{ display: "flex", alignItems: "center", gap: 60 }} className="hf">
-            <div style={{ flex: 1 }}>
+        <motion.div className="hero-glow" animate={{ x: [0, 70, 0], y: [0, -45, 0], opacity: [0.45, 0.75, 0.45] }} transition={{ duration: 9, repeat: Infinity, ease: "easeInOut" }} style={{ left: "8%", bottom: "10%", zIndex: 1 }} />
+        <motion.div className="hero-glow" animate={{ x: [0, -55, 0], y: [0, 50, 0], opacity: [0.35, 0.65, 0.35] }} transition={{ duration: 11, repeat: Infinity, ease: "easeInOut" }} style={{ right: "8%", top: "14%", zIndex: 1 }} />
+        <motion.div className="hero-flight" animate={{ x: [-28, 18, -28], opacity: [0.35, 0.9, 0.35] }} transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }} />
+        <motion.div className="hero-shell" style={{ maxWidth: 1400, margin: "0 auto", padding: "80px 60px", position: "relative", zIndex: 2, y: heroY, opacity: heroOp, width: "100%" }}>
+          <div className="hero-grid" style={{ display: "grid", gridTemplateColumns: "1.2fr 0.8fr", alignItems: "center", gap: 80 }}>
+            <div className="hero-copy" style={{ maxWidth: 650 }}>
               <motion.div initial={{ opacity: 0, x: -30 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.7 }}>
-                <div style={{ display: "inline-flex", alignItems: "center", gap: 8, padding: "7px 16px", borderRadius: 99, border: `1px solid ${C.gold}44`, background: `${C.gold}12`, color: C.gold, fontSize: 12, fontWeight: 700, letterSpacing: "1px", marginBottom: 28 }}>
+                <div style={{ display: "inline-flex", alignItems: "center", gap: 8, padding: "8px 18px", borderRadius: 99, border: `1px solid ${C.gold}55`, background: "rgba(255,255,255,0.08)", color: C.goldL, fontSize: 12, fontWeight: 800, letterSpacing: "1px", marginBottom: 30, boxShadow: `0 16px 45px ${C.navy}33` }}>
                   <span>⭐⭐⭐⭐⭐</span> Trusted by Thousands Across India
                 </div>
               </motion.div>
               <motion.h1 className="hero-h" initial={{ opacity: 0, y: 48 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
-                style={{ ...SH, fontSize: 52, fontWeight: 900, lineHeight: 1.1, letterSpacing: "-1px", color: C.white, marginBottom: 16 }}>
+                style={{ ...SH, fontSize: 70, fontWeight: 900, lineHeight: 1.02, letterSpacing: 0, color: C.white, marginBottom: 22, textShadow: "0 18px 55px rgba(0,0,0,.35)" }}>
                 Your Gateway to<br />
                 <span style={{ background: `linear-gradient(135deg,${C.gold},${C.goldL})`, WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>
                   <Typewriter words={HERO_WORDS} speed={85} pause={2200} />
                 </span>
               </motion.h1>
               <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.28 }}
-                style={{ ...SUB, fontSize: 17, color: "#94A3B8", lineHeight: 1.8, marginBottom: 36, maxWidth: 480, fontStyle: "italic" }}>
+                className="hero-sub"
+                style={{ ...SUB, fontSize: 20, color: "#D5DFEC", lineHeight: 1.75, marginBottom: 38, maxWidth: 650, fontStyle: "italic" }}>
                 Study, Work, Travel & Settle Abroad with confidence through expert visa guidance and personalized support.
               </motion.p>
               <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.38 }}
+                className="hero-actions"
                 style={{ display: "flex", gap: 14, flexWrap: "wrap", marginBottom: 44 }}>
-                <GoldBtn onClick={() => go("assessment")} style={{ fontSize: 15, padding: "14px 28px" }}>✦ Book Free Consultation</GoldBtn>
+                <GoldBtn onClick={() => go("assessment")} style={{ fontSize: 16, padding: "0 30px", height: 64, borderRadius: 16, fontWeight: 800 }}>Book Free Consultation</GoldBtn>
                 <motion.a href={WA_LINK} target="_blank" rel="noopener noreferrer" whileHover={{ scale: 1.04 }} whileTap={{ scale: 0.97 }}
-                  style={{ display: "flex", alignItems: "center", gap: 8, padding: "14px 24px", borderRadius: 12, background: "#25D366", color: "white", fontWeight: 700, fontSize: 15, textDecoration: "none", fontFamily: "Poppins,sans-serif" }}>
+                  style={{ display: "flex", alignItems: "center", gap: 8, height: 64, padding: "0 26px", borderRadius: 16, background: "#25D366", color: "white", fontWeight: 800, fontSize: 15, textDecoration: "none", fontFamily: "Poppins,sans-serif", boxShadow: "0 18px 42px rgba(37,211,102,.25)" }}>
                   <WhatsAppIcon /> Chat on WhatsApp
                 </motion.a>
                 <motion.a href={`tel:${PHONE_NUMBER}`} whileHover={{ scale: 1.04 }} whileTap={{ scale: 0.97 }}
-                  style={{ display: "flex", alignItems: "center", gap: 8, padding: "14px 24px", borderRadius: 12, border: `1.5px solid ${C.gold}55`, color: C.goldL, fontWeight: 700, fontSize: 15, textDecoration: "none", fontFamily: "Poppins,sans-serif" }}>
-                  📞 Call Expert
+                  style={{ display: "flex", alignItems: "center", gap: 8, height: 64, padding: "0 26px", borderRadius: 16, border: `1.5px solid ${C.gold}66`, background: "rgba(255,255,255,0.06)", color: C.goldL, fontWeight: 800, fontSize: 15, textDecoration: "none", fontFamily: "Poppins,sans-serif", backdropFilter: "blur(14px)" }}>
+                  Call Expert
                 </motion.a>
               </motion.div>
               <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.5 }}
-                style={{ display: "flex", flexWrap: "wrap", gap: 16 }}>
-                {["✔ Licensed Consultants", "✔ Transparent Process", "✔ End-to-End Support"].map((b) => (
-                  <span key={b} style={{ color: C.goldL, fontSize: 13, fontWeight: 600 }}>{b}</span>
+                className="hero-trust"
+                style={{ display: "flex", flexWrap: "wrap", gap: 14 }}>
+                {["Licensed Consultants", "Transparent Process", "End-to-End Support"].map((b) => (
+                  <span key={b} style={{ display: "inline-flex", alignItems: "center", gap: 8, color: C.goldL, fontSize: 14, fontWeight: 700 }}>
+                    <span style={{ width: 18, height: 18, borderRadius: "50%", background: `${C.gold}22`, border: `1px solid ${C.gold}55`, display: "inline-flex", alignItems: "center", justifyContent: "center", color: C.gold, fontSize: 11 }}>OK</span>
+                    {b}
+                  </span>
                 ))}
               </motion.div>
             </div>
-            <motion.div className="hero-story" initial={{ opacity: 0, x: 0, scale: 0.95 }} animate={{ opacity: 1, x: 0, scale: 1 }} transition={{ duration: 0.9, delay: 0.2, ease: [0.22, 1, 0.36, 1] }} style={{ width: "100%" }}>
+            <motion.div className="hero-story" initial={{ opacity: 0, x: 0, scale: 0.95 }} animate={{ opacity: 1, x: 0, scale: 1 }} transition={{ duration: 0.9, delay: 0.2, ease: [0.22, 1, 0.36, 1] }} style={{ width: "100%", maxWidth: 480, justifySelf: "end" }}>
               <motion.div animate={{ y: [0, -14, 0] }} transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
-                style={{ background: "rgba(255,255,255,0.04)", backdropFilter: "blur(20px)", border: `1px solid ${C.gold}22`, borderRadius: 24, padding: 32, boxShadow: "0 32px 80px rgba(0,0,0,.5)", width: "100%", maxWidth: 300, marginLeft: "auto", marginRight: "auto" }}>
-                <div style={{ display: "flex", alignItems: "center", gap: 8, justifyContent: "center", marginBottom: 18 }}>
-                  <span style={{ width: 8, height: 8, borderRadius: "50%", background: "#3ED598", display: "inline-block", boxShadow: "0 0 10px #3ED598" }} />
-                  <span style={{ ...SH, color: C.goldL, fontSize: 13, fontWeight: 800, letterSpacing: "2px" }}>RECENT SUCCESS STORY</span>
+                className="hero-card"
+                style={{ background: "linear-gradient(145deg,rgba(255,255,255,0.16),rgba(255,255,255,0.055))", backdropFilter: "blur(24px)", border: `1px solid ${C.gold}33`, borderRadius: 28, padding: 40, boxShadow: "0 38px 95px rgba(0,0,0,.52)", width: "100%", maxWidth: 480, marginLeft: "auto", marginRight: "auto", position: "relative", overflow: "hidden" }}>
+                <div style={{ position: "absolute", inset: 1, borderRadius: 27, background: `linear-gradient(135deg,${C.gold}18,transparent 34%,rgba(255,255,255,.08) 68%,transparent)`, pointerEvents: "none" }} />
+                <div style={{ position: "relative", display: "flex", alignItems: "center", gap: 8, justifyContent: "space-between", marginBottom: 22 }}>
+                  <span style={{ ...SH, color: C.goldL, fontSize: 13, fontWeight: 900, letterSpacing: "2px", flex: 1 }}>LATEST SUCCESS STORY</span>
+                  <span style={{ display: "inline-flex", alignItems: "center", gap: 6, padding: "7px 12px", borderRadius: 999, background: "rgba(62,213,152,.13)", border: "1px solid rgba(62,213,152,.32)", color: "#8DF0C6", fontSize: 12, fontWeight: 800 }}>Approved</span>
                 </div>
                 <div style={{ paddingTop: 0 }}>
                   <AnimatePresence mode="wait">
                     <motion.div key={storyIdx} initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -14 }} transition={{ duration: 0.5, ease: "easeOut" }}
-                      style={{ background: `${C.gold}10`, border: `1px solid ${C.gold}30`, borderRadius: 16, padding: "20px 18px" }}>
-                      <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 14 }}>
-                        <div style={{ width: 44, height: 44, borderRadius: "50%", background: `linear-gradient(135deg,${C.gold},${C.goldL})`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 15, fontWeight: 800, color: C.navy, flexShrink: 0 }}>
+                      style={{ position: "relative", background: "rgba(11,45,92,.36)", border: `1px solid ${C.gold}36`, borderRadius: 20, padding: "28px 26px" }}>
+                      <div style={{ display: "flex", alignItems: "center", gap: 16, marginBottom: 20 }}>
+                        <div style={{ width: 58, height: 58, borderRadius: "50%", background: `linear-gradient(135deg,${C.gold},${C.goldL})`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 18, fontWeight: 900, color: C.navy, flexShrink: 0, boxShadow: `0 14px 32px ${C.gold}33` }}>
                           {TESTIMONIALS[storyIdx].av}
                         </div>
                         <div>
-                          <div style={{ fontSize: 16, fontWeight: 800, color: "white" }}>{TESTIMONIALS[storyIdx].name}</div>
-                          <div style={{ fontSize: 12, color: C.goldL, fontWeight: 600 }}>✓ {TESTIMONIALS[storyIdx].visa}</div>
+                          <div style={{ fontSize: 20, fontWeight: 900, color: "white", lineHeight: 1.2 }}>{TESTIMONIALS[storyIdx].name}</div>
+                          <div style={{ fontSize: 13, color: C.goldL, fontWeight: 800, marginTop: 4 }}>{TESTIMONIALS[storyIdx].visa}</div>
                         </div>
                       </div>
-                      <div style={{ fontSize: 13.5, color: "rgba(255,255,255,0.85)", lineHeight: 1.6 }}>
+                      <div style={{ color: C.goldL, letterSpacing: 1, fontSize: 15, marginBottom: 14 }}>★★★★★</div>
+                      <div style={{ fontSize: 15.5, color: "rgba(255,255,255,0.9)", lineHeight: 1.75 }}>
                         "{TESTIMONIALS[storyIdx].text}"
+                      </div>
+                      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, marginTop: 22 }}>
+                        <div style={{ padding: "12px 14px", borderRadius: 14, background: "rgba(255,255,255,.08)", color: C.goldL, fontSize: 12, fontWeight: 800 }}>Visa Approved</div>
+                        <div style={{ padding: "12px 14px", borderRadius: 14, background: "rgba(255,255,255,.08)", color: C.goldL, fontSize: 12, fontWeight: 800 }}>June 2026</div>
                       </div>
                     </motion.div>
                   </AnimatePresence>
