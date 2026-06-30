@@ -172,7 +172,8 @@ const DESTINATIONS = [
   { f: "🇸🇬", n: "Singapore", sub: "Business • Finance • Tech" },
 ];
 const TIMELINE = ["Free Consultation", "Profile Evaluation", "Document Preparation", "Application Submission", "Visa Filing", "Interview Guidance", "Visa Approval", "Fly Abroad 🎉"];
-const COUNTRY_LIST = ["USA", "Canada", "UK", "Europe", "Germany", "Hungary", "Poland", "Australia", "New Zealand"];
+const POPULAR_COUNTRIES = ["USA", "Canada", "UK", "Australia", "New Zealand"];
+const EUROPE_COUNTRIES = ["Germany", "Hungary", "Poland", "France", "Netherlands", "Ireland"];
 const VISA_TYPES = [{ v: "pr", l: "PR Visa" }, { v: "student", l: "Student Visa" }, { v: "work", l: "Work Permit" }, { v: "tourist", l: "Tourist Visa" }, { v: "other", l: "Other Visa" }];
 
 const TESTIMONIALS = [
@@ -225,7 +226,7 @@ export default function App(){
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [backTop, setBackTop] = useState(false);
-  const [form, setForm] = useState({ name: "", phone: "", email: "", country: "", visa: "", msg: "", consultType: "call", date: "", time: "", countries: [] });
+  const [form, setForm] = useState({ name: "", phone: "", email: "", country: "", visa: "", msg: "", consultType: "call", date: "", time: "", countries: [], otherCountry: "" });
   const [sent, setSent] = useState(false);
   const [storyIdx, setStoryIdx] = useState(0);
   const { scrollYProgress } = useScroll();
@@ -511,15 +512,27 @@ export default function App(){
                     </div>
 
                     <div style={{ marginBottom: 20 }}>
-                      <div style={{ fontSize: 13, fontWeight: 700, color: C.navy, marginBottom: 10 }}>Interested Countries</div>
-                      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }} className="g2">
-                        {COUNTRY_LIST.map((c) => (
+                      <div style={{ fontSize: 13, fontWeight: 700, color: C.navy, marginBottom: 10 }}>Interested Countries — Popular</div>
+                      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, marginBottom: 16 }} className="g2">
+                        {POPULAR_COUNTRIES.map((c) => (
                           <label key={c} style={{ display: "flex", alignItems: "center", gap: 8, cursor: "pointer", fontSize: 14, color: C.text }}>
                             <input type="checkbox" checked={form.countries.includes(c)} onChange={() => setForm({ ...form, countries: form.countries.includes(c) ? form.countries.filter((x) => x !== c) : [...form.countries, c] })} style={{ accentColor: C.gold, width: 16, height: 16 }} />
                             {c}
                           </label>
                         ))}
                       </div>
+                      <div style={{ fontSize: 13, fontWeight: 700, color: C.navy, marginBottom: 10 }}>Europe</div>
+                      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, marginBottom: 16 }} className="g2">
+                        {EUROPE_COUNTRIES.map((c) => (
+                          <label key={c} style={{ display: "flex", alignItems: "center", gap: 8, cursor: "pointer", fontSize: 14, color: C.text }}>
+                            <input type="checkbox" checked={form.countries.includes(c)} onChange={() => setForm({ ...form, countries: form.countries.includes(c) ? form.countries.filter((x) => x !== c) : [...form.countries, c] })} style={{ accentColor: C.gold, width: 16, height: 16 }} />
+                            {c}
+                          </label>
+                        ))}
+                      </div>
+                      <input placeholder="Other country (optional)" value={form.otherCountry} onChange={(e) => setForm({ ...form, otherCountry: e.target.value })}
+                        style={{ padding: "13px 16px", border: `1.5px solid ${C.border}`, borderRadius: 10, fontSize: 14, outline: "none", fontFamily: "Poppins,sans-serif", width: "100%" }}
+                        onFocus={(e) => (e.target.style.borderColor = C.gold)} onBlur={(e) => (e.target.style.borderColor = C.border)} />
                     </div>
 
                     <GoldBtn style={{ width: "100%", padding: 16, fontSize: 16, borderRadius: 12, marginTop: 4 }} onClick={() => { if (form.name && form.email && form.phone) setSent(true); }}>
