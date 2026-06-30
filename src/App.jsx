@@ -41,11 +41,12 @@ function Typewriter({ words, speed = 80, pause = 2000 }) {
   const [del, setDel] = useState(false);
   const [txt, setTxt] = useState("");
   useEffect(() => {
+    let pauseTimer;
     const t = setTimeout(() => {
       const w = words[wi];
       if (!del) {
         setTxt(w.slice(0, ci + 1));
-        if (ci + 1 === w.length) { setTimeout(() => setDel(true), pause); return; }
+        if (ci + 1 === w.length) { pauseTimer = setTimeout(() => setDel(true), pause); return; }
         setCi((p) => p + 1);
       } else {
         setTxt(w.slice(0, ci - 1));
@@ -53,7 +54,7 @@ function Typewriter({ words, speed = 80, pause = 2000 }) {
         setCi((p) => p - 1);
       }
     }, del ? speed / 2 : speed);
-    return () => clearTimeout(t);
+    return () => { clearTimeout(t); clearTimeout(pauseTimer); };
   }, [ci, del, wi, words, speed, pause]);
   return (
     <span>
@@ -173,6 +174,7 @@ const STATS = [
   { n: "98", s: "%", l: "Visa Success Rate" },
   { n: "24", s: "/7", l: "Support Available" },
 ];
+const HERO_WORDS = ["Global Opportunities", "a Better Future", "Your Dream Life", "New Horizons"];
 const DESTINATIONS = [
   { f: "🇨🇦", n: "Canada", sub: "Study • Work • PR" },
   { f: "🇦🇺", n: "Australia", sub: "Study • Work • Migrate" },
@@ -272,9 +274,9 @@ export default function App(){
         .nav-a:hover{color:${C.gold};}.nav-a:hover::after{width:100%;}
         @media(max-width:900px){
           .hide-mob{display:none!important;}
-          .g2{grid-template-columns:1fr!important;}
-          .g3{grid-template-columns:1fr!important;}
-          .g4{grid-template-columns:1fr 1fr!important;}
+          .g2{grid-template-columns:minmax(0,1fr)!important;}
+          .g3{grid-template-columns:minmax(0,1fr)!important;}
+          .g4{grid-template-columns:minmax(0,1fr) minmax(0,1fr)!important;}
           .hero-h{font-size:34px!important;}
           .hf{flex-direction:column!important;gap:36px!important;}
           .hero-story{order:-1;margin-bottom:8px;}
@@ -339,7 +341,7 @@ export default function App(){
                 style={{ ...SH, fontSize: 52, fontWeight: 900, lineHeight: 1.1, letterSpacing: "-1px", color: C.white, marginBottom: 16 }}>
                 Your Gateway to<br />
                 <span style={{ background: `linear-gradient(135deg,${C.gold},${C.goldL})`, WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>
-                  <Typewriter words={["Global Opportunities", "a Better Future", "Your Dream Life", "New Horizons"]} speed={85} pause={2200} />
+                  <Typewriter words={HERO_WORDS} speed={85} pause={2200} />
                 </span>
               </motion.h1>
               <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.28 }}
@@ -675,17 +677,17 @@ export default function App(){
             <p style={{ ...SUB, color: C.slate, fontSize: 16, fontStyle: "italic" }}>Premium visa pathways to the world's most sought-after destinations</p>
           </Reveal>
           <motion.div variants={containerV} initial="hidden" whileInView="show" viewport={{ once: true }}
-            style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: 20 }} className="g4">
+            style={{ display: "grid", gridTemplateColumns: "repeat(4,minmax(0,1fr))", gap: 20 }} className="g4">
             {DESTINATIONS.map((d, i) => (
               <motion.div key={d.n} variants={fadeUp(i * 0.06)}
                 whileHover={{ y: -6, boxShadow: `0 16px 40px ${C.gold}22`, borderColor: C.gold }}
                 onClick={() => { const cn = d.formName || d.n; setForm((f) => ({ ...f, countries: f.countries.includes(cn) ? f.countries : [...f.countries, cn] })); go("assessment"); }}
-                style={{ background: C.white, borderRadius: 18, padding: "28px 20px", border: `1px solid ${C.border}`, textAlign: "center", cursor: "pointer", transition: "all .25s" }}>
+                style={{ background: C.white, borderRadius: 18, padding: "28px 16px", border: `1px solid ${C.border}`, textAlign: "center", cursor: "pointer", transition: "all .25s", minWidth: 0 }}>
                 <motion.div whileHover={{ scale: 1.2 }} style={{ fontSize: 42, marginBottom: 14, display: "inline-block" }}>{d.f}</motion.div>
                 <div style={{ ...SH, fontSize: 15, fontWeight: 700, color: C.navy, marginBottom: 6 }}>{d.n}</div>
                 <div style={{ fontSize: 12, color: C.slate, marginBottom: 16 }}>{d.sub}</div>
                 <motion.div whileHover={{ background: C.gold, color: C.navy }}
-                  style={{ display: "inline-block", padding: "8px 14px", borderRadius: 6, border: `1px solid ${C.gold}`, color: C.gold, fontSize: 11, fontWeight: 700, transition: "all .2s", cursor: "pointer", whiteSpace: "nowrap" }}>
+                  style={{ display: "inline-block", padding: "8px 12px", borderRadius: 6, border: `1px solid ${C.gold}`, color: C.gold, fontSize: 11, fontWeight: 700, transition: "all .2s", cursor: "pointer", whiteSpace: "normal", lineHeight: 1.4 }}>
                   Book Free Consultation →
                 </motion.div>
               </motion.div>
