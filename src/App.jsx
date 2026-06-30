@@ -681,8 +681,8 @@ export default function App(){
                 <div style={{ ...SH, fontSize: 15, fontWeight: 700, color: C.navy, marginBottom: 6 }}>{d.n}</div>
                 <div style={{ fontSize: 12, color: C.slate, marginBottom: 16 }}>{d.sub}</div>
                 <motion.div whileHover={{ background: C.gold, color: C.navy }}
-                  style={{ display: "inline-block", padding: "6px 16px", borderRadius: 6, border: `1px solid ${C.gold}`, color: C.gold, fontSize: 12, fontWeight: 700, transition: "all .2s", cursor: "pointer" }}>
-                  Explore →
+                  style={{ display: "inline-block", padding: "8px 14px", borderRadius: 6, border: `1px solid ${C.gold}`, color: C.gold, fontSize: 11, fontWeight: 700, transition: "all .2s", cursor: "pointer", whiteSpace: "nowrap" }}>
+                  Book Free Consultation →
                 </motion.div>
               </motion.div>
             ))}
@@ -787,7 +787,7 @@ export default function App(){
               </div>
             </div>
             {[
-              { t: "Quick Links", ls: [{ l: "About", id: "about-us" }, { l: "Services", id: "services" }, { l: "Countries", id: "tourist-visa" }, { l: "Contact", id: "contact" }] },
+              { t: "Quick Links", ls: [{ l: "About", id: "about-us" }, { l: "Services", id: "services" }, { l: "Countries", id: "tourist-visa" }] },
               { t: "Services", ls: [{ l: "Study Visa", id: "study-abroad" }, { l: "Work Visa", id: "work-visa" }, { l: "Tourist Visa", id: "tourist-visa" }, { l: "Business Visa", id: "business-visa" }, { l: "PR", id: "pr" }] },
             ].map((col) => (
               <div key={col.t}>
@@ -800,15 +800,24 @@ export default function App(){
             <div>
               <div style={{ ...SH, fontWeight: 700, marginBottom: 18, fontSize: 14, color: C.gold, letterSpacing: "1px" }}>Contact</div>
               {[
-                { i: "📍", v: "Office Address, Gujarat, India" },
-                { i: "📞", v: "+91 81600 50554" },
-                { i: "📧", v: "info@visabuddies.in" },
-                { i: "🌐", v: "www.visa-buddies.com" },
+                { i: "📍", v: "Office Address, Gujarat, India", href: null },
+                { i: "📞", v: "+91 81600 50554", href: `tel:${PHONE_NUMBER}` },
+                { i: <WhatsAppIcon size={14} />, v: "Chat on WhatsApp", href: WA_LINK, ext: true },
+                { i: "📧", v: "info@visabuddies.in", href: "mailto:info@visabuddies.in" },
+                { i: "🌐", v: "www.visa-buddies.com", href: "https://www.visa-buddies.com", ext: true },
               ].map((it) => (
-                <div key={it.v} style={{ display: "flex", gap: 10, marginBottom: 12, alignItems: "flex-start" }}>
-                  <span style={{ fontSize: 14, flexShrink: 0, marginTop: 1 }}>{it.i}</span>
-                  <span style={{ color: "#64748B", fontSize: 13, lineHeight: 1.6 }}>{it.v}</span>
-                </div>
+                it.href ? (
+                  <motion.a key={it.v} href={it.href} target={it.ext ? "_blank" : undefined} rel={it.ext ? "noopener noreferrer" : undefined} whileHover={{ x: 4, color: C.gold }}
+                    style={{ display: "flex", gap: 10, marginBottom: 12, alignItems: "flex-start", textDecoration: "none", cursor: "pointer" }}>
+                    <span style={{ fontSize: 14, flexShrink: 0, marginTop: 1, color: "#64748B" }}>{it.i}</span>
+                    <span style={{ color: "#64748B", fontSize: 13, lineHeight: 1.6 }}>{it.v}</span>
+                  </motion.a>
+                ) : (
+                  <div key={it.v} style={{ display: "flex", gap: 10, marginBottom: 12, alignItems: "flex-start" }}>
+                    <span style={{ fontSize: 14, flexShrink: 0, marginTop: 1 }}>{it.i}</span>
+                    <span style={{ color: "#64748B", fontSize: 13, lineHeight: 1.6 }}>{it.v}</span>
+                  </div>
+                )
               ))}
             </div>
           </div>
