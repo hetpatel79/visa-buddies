@@ -277,6 +277,7 @@ export default function App(){
           .g4{grid-template-columns:1fr 1fr!important;}
           .hero-h{font-size:34px!important;}
           .hf{flex-direction:column!important;gap:36px!important;}
+          .hero-story{order:-1;margin-bottom:8px;}
         }
       `}</style>
 
@@ -364,7 +365,7 @@ export default function App(){
                 ))}
               </motion.div>
             </div>
-            <motion.div initial={{ opacity: 0, x: 0, scale: 0.95 }} animate={{ opacity: 1, x: 0, scale: 1 }} transition={{ duration: 0.9, delay: 0.2, ease: [0.22, 1, 0.36, 1] }} style={{ width: "100%" }}>
+            <motion.div className="hero-story" initial={{ opacity: 0, x: 0, scale: 0.95 }} animate={{ opacity: 1, x: 0, scale: 1 }} transition={{ duration: 0.9, delay: 0.2, ease: [0.22, 1, 0.36, 1] }} style={{ width: "100%" }}>
               <motion.div animate={{ y: [0, -14, 0] }} transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
                 style={{ background: "rgba(255,255,255,0.04)", backdropFilter: "blur(20px)", border: `1px solid ${C.gold}22`, borderRadius: 24, padding: 32, boxShadow: "0 32px 80px rgba(0,0,0,.5)", width: "100%", maxWidth: 300, marginLeft: "auto", marginRight: "auto" }}>
                 <div style={{ display: "flex", alignItems: "center", gap: 8, justifyContent: "center", marginBottom: 18 }}>
