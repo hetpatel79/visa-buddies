@@ -127,20 +127,22 @@ function WhatsAppIcon({ size = 18 }) {
   );
 }
 
-function GoldBtn({ children, onClick, style = {}, outline = false }) {
+function GoldBtn({ children, onClick, style = {}, outline = false, disabled = false }) {
   return (
-    <motion.button whileHover={{ scale: 1.05, boxShadow: `0 8px 30px ${C.gold}66` }} whileTap={{ scale: 0.96 }}
-      onClick={onClick}
+    <motion.button whileHover={disabled ? {} : { scale: 1.05, boxShadow: `0 8px 30px ${C.gold}66` }} whileTap={disabled ? {} : { scale: 0.96 }}
+      onClick={disabled ? undefined : onClick}
+      disabled={disabled}
       style={{
         background: outline ? "transparent" : `linear-gradient(135deg,${C.gold},${C.goldL},${C.gold})`,
         backgroundSize: "200% 200%",
         color: outline ? C.gold : C.navy,
         border: `2px solid ${C.gold}`,
         padding: "13px 28px", borderRadius: 8, fontSize: 15, fontWeight: 700,
-        cursor: "pointer", fontFamily: "Poppins,sans-serif",
+        cursor: disabled ? "not-allowed" : "pointer", fontFamily: "Poppins,sans-serif",
+        opacity: disabled ? 0.6 : 1,
         ...style,
       }}>
-      <motion.span animate={{ backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"] }} transition={{ duration: 3, repeat: Infinity }} style={{ display: "block" }}>
+      <motion.span animate={disabled ? {} : { backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"] }} transition={{ duration: 3, repeat: Infinity }} style={{ display: "block" }}>
         {children}
       </motion.span>
     </motion.button>
@@ -190,6 +192,79 @@ const POPULAR_COUNTRIES = ["USA", "Canada", "UK", "Australia", "New Zealand"];
 const EUROPE_COUNTRIES = ["Germany", "Hungary", "Poland", "France", "Netherlands", "Ireland"];
 const VISA_TYPES = [{ v: "pr", l: "PR Visa" }, { v: "student", l: "Student Visa" }, { v: "work", l: "Work Permit" }, { v: "tourist", l: "Tourist Visa" }, { v: "business", l: "Business Visa" }, { v: "other", l: "Other Visa" }];
 
+// ── Office Hours / Time Slots (11 AM – 5 PM) ─────────────────────
+const TIME_SLOTS = [
+  { label: "11:00 AM - 12:00 PM", start: 11, end: 12 },
+  { label: "12:00 PM - 1:00 PM",  start: 12, end: 13 },
+  { label: "1:00 PM - 2:00 PM",   start: 13, end: 14 },
+  { label: "2:00 PM - 3:00 PM",   start: 14, end: 15 },
+  { label: "3:00 PM - 4:00 PM",   start: 15, end: 16 },
+  { label: "4:00 PM - 5:00 PM",   start: 16, end: 17 },
+];
+
+function todayStr() {
+  const d = new Date();
+  d.setMinutes(d.getMinutes() - d.getTimezoneOffset());
+  return d.toISOString().split("T")[0];
+}
+
+function isSundayStr(dateStr) {
+  if (!dateStr) return false;
+  const [y, m, d] = dateStr.split("-").map(Number);
+  return new Date(y, m - 1, d).getDay() === 0;
+}
+
+function isPastDateStr(dateStr) {
+  if (!dateStr) return false;
+  return dateStr < todayStr();
+}
+
+// Returns the list of TIME_SLOTS still bookable for a given date string.
+// If the date is in the future, all slots are available.
+// If the date is today, slots whose start time has already passed are hidden.
+function getAvailableSlots(dateStr) {
+  if (!dateStr) return [];
+  if (dateStr !== todayStr()) return TIME_SLOTS;
+  const now = new Date();
+  const currentHour = now.getHours() + now.getMinutes() / 60;
+  return TIME_SLOTS.filter((s) => s.start > currentHour);
+}
+
+const NAME_RE = /^[A-Za-z\s.'-]{3,}$/;
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const PHONE_RE = /^[6-9]\d{9}$/; // valid 10-digit Indian mobile number
+
+function validateConsultationForm(form) {
+  const errs = {};
+
+  if (!form.name.trim()) errs.name = "Name is required.";
+  else if (!NAME_RE.test(form.name.trim())) errs.name = "Enter a valid name (min 3 letters, no numbers).";
+
+  if (!form.phone.trim()) errs.phone = "Phone number is required.";
+  else if (!PHONE_RE.test(form.phone.trim())) errs.phone = "Enter a valid 10-digit Indian mobile number.";
+
+  if (!form.email.trim()) errs.email = "Email is required.";
+  else if (!EMAIL_RE.test(form.email.trim())) errs.email = "Enter a valid email address.";
+
+  if (!form.consultType) errs.consultType = "Please select a consultation type.";
+
+  if (!form.visa) errs.visa = "Please select a visa type.";
+
+  const hasCountry = (form.countries && form.countries.length > 0) || (form.otherCountry && form.otherCountry.trim());
+  if (!hasCountry) errs.countries = "Select at least one country of interest.";
+
+  if (!form.date) errs.date = "Please select a consultation date.";
+  else if (isPastDateStr(form.date)) errs.date = "Please select today or a future date.";
+  else if (isSundayStr(form.date)) errs.date = "We're closed on Sundays. Please pick another date.";
+
+  if (!form.time) errs.time = "Please select a time slot.";
+  else if (form.date && getAvailableSlots(form.date).every((s) => s.label !== form.time)) {
+    errs.time = "That slot is no longer available. Please pick another.";
+  }
+
+  return errs;
+}
+
 const TESTIMONIALS = [
   { name: "Rahul Sharma", visa: "Canada Student Visa", av: "RS", text: "The entire process was smooth. VISA BUDDIES handled everything professionally." },
   { name: "Priya Patel", visa: "New Zealand Work Visa", av: "PP", text: "They explained every step clearly and were always available to answer questions." },
@@ -234,8 +309,11 @@ export default function App(){
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [backTop, setBackTop] = useState(false);
-  const [form, setForm] = useState({ name: "", phone: "", email: "", country: "", visa: "", msg: "", consultType: "call", date: "", time: "", countries: [], otherCountry: "" });
+  const [form, setForm] = useState({ name: "", phone: "", email: "", country: "", visa: "", msg: "", consultType: "call", date: "", time: "", countries: [], otherCountry: "", company: "" });
   const [sent, setSent] = useState(false);
+  const [errors, setErrors] = useState({});
+  const [submitting, setSubmitting] = useState(false);
+  const lastSubmitRef = useRef(0);
   const [storyIdx, setStoryIdx] = useState(0);
   const { scrollYProgress } = useScroll();
   const heroY = useTransform(scrollYProgress, [0, 0.35], [0, -70]);
@@ -494,60 +572,106 @@ export default function App(){
                     <motion.div animate={{ rotate: [0, 15, -15, 0], scale: [1, 1.2, 1] }} transition={{ duration: 0.8 }} style={{ fontSize: 60, marginBottom: 16 }}>🎉</motion.div>
                     <h3 style={{ ...SH, fontSize: 24, fontWeight: 900, color: C.navy, marginBottom: 10 }}>Consultation Booked!</h3>
                     <p style={{ color: C.slate, fontSize: 15, marginBottom: 24 }}>Our visa expert will contact you within 24 hours.</p>
-                    <GoldBtn onClick={() => setSent(false)}>Book Another</GoldBtn>
+                    <GoldBtn onClick={() => { setSent(false); setForm({ name: "", phone: "", email: "", country: "", visa: "", msg: "", consultType: "call", date: "", time: "", countries: [], otherCountry: "", company: "" }); setErrors({}); }}>Book Another</GoldBtn>
                   </motion.div>
                 ) : (
                   <motion.div key="form" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
-                    <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16, marginBottom: 16 }} className="g2">
+                    {/* Honeypot field — hidden from real users, bots will fill it in */}
+                    <input type="text" name="company" value={form.company} tabIndex={-1} autoComplete="off"
+                      onChange={(e) => setForm({ ...form, company: e.target.value })}
+                      style={{ position: "absolute", left: "-9999px", width: 1, height: 1, opacity: 0 }} aria-hidden="true" />
+
+                    <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16, marginBottom: 6 }} className="g2">
                       {[{ ph: "Full Name *", k: "name", t: "text" }, { ph: "Phone Number *", k: "phone", t: "tel" }].map((f) => (
-                        <input key={f.k} placeholder={f.ph} type={f.t} value={form[f.k]} onChange={(e) => setForm({ ...form, [f.k]: e.target.value })}
-                          style={{ padding: "13px 16px", border: `1.5px solid ${C.border}`, borderRadius: 10, fontSize: 15, outline: "none", fontFamily: "Poppins,sans-serif", width: "100%" }}
-                          onFocus={(e) => (e.target.style.borderColor = C.gold)} onBlur={(e) => (e.target.style.borderColor = C.border)} />
+                        <div key={f.k}>
+                          <input placeholder={f.ph} type={f.t} value={form[f.k]}
+                            onChange={(e) => { setForm({ ...form, [f.k]: e.target.value }); setErrors((er) => ({ ...er, [f.k]: undefined })); }}
+                            style={{ padding: "13px 16px", border: `1.5px solid ${errors[f.k] ? "#DC2626" : C.border}`, borderRadius: 10, fontSize: 15, outline: "none", fontFamily: "Poppins,sans-serif", width: "100%" }}
+                            onFocus={(e) => (e.target.style.borderColor = C.gold)} onBlur={(e) => (e.target.style.borderColor = errors[f.k] ? "#DC2626" : C.border)} />
+                          {errors[f.k] && <div style={{ color: "#DC2626", fontSize: 12, marginTop: 4 }}>{errors[f.k]}</div>}
+                        </div>
                       ))}
                     </div>
-                    <input placeholder="Email Address *" type="email" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })}
-                      style={{ padding: "13px 16px", border: `1.5px solid ${C.border}`, borderRadius: 10, fontSize: 15, outline: "none", fontFamily: "Poppins,sans-serif", width: "100%", marginBottom: 16 }}
-                      onFocus={(e) => (e.target.style.borderColor = C.gold)} onBlur={(e) => (e.target.style.borderColor = C.border)} />
+
+                    <div style={{ marginBottom: 10 }}>
+                      <input placeholder="Email Address *" type="email" value={form.email}
+                        onChange={(e) => { setForm({ ...form, email: e.target.value }); setErrors((er) => ({ ...er, email: undefined })); }}
+                        style={{ padding: "13px 16px", border: `1.5px solid ${errors.email ? "#DC2626" : C.border}`, borderRadius: 10, fontSize: 15, outline: "none", fontFamily: "Poppins,sans-serif", width: "100%" }}
+                        onFocus={(e) => (e.target.style.borderColor = C.gold)} onBlur={(e) => (e.target.style.borderColor = errors.email ? "#DC2626" : C.border)} />
+                      {errors.email && <div style={{ color: "#DC2626", fontSize: 12, marginTop: 4 }}>{errors.email}</div>}
+                    </div>
 
                     <div style={{ marginBottom: 18 }}>
                       <div style={{ fontSize: 13, fontWeight: 700, color: C.navy, marginBottom: 10 }}>Consultation Type</div>
                       <div style={{ display: "flex", gap: 20 }}>
                         {[{ v: "call", l: "📞 Schedule a Call" }, { v: "visit", l: "📍 Schedule a Visit" }].map((o) => (
                           <label key={o.v} style={{ display: "flex", alignItems: "center", gap: 8, cursor: "pointer", fontSize: 14, color: C.text }}>
-                            <input type="radio" name="consultType" checked={form.consultType === o.v} onChange={() => setForm({ ...form, consultType: o.v })} style={{ accentColor: C.gold, width: 16, height: 16 }} />
+                            <input type="radio" name="consultType" checked={form.consultType === o.v}
+                              onChange={() => { setForm({ ...form, consultType: o.v }); setErrors((er) => ({ ...er, consultType: undefined })); }}
+                              style={{ accentColor: C.gold, width: 16, height: 16 }} />
                             {o.l}
                           </label>
                         ))}
                       </div>
+                      {errors.consultType && <div style={{ color: "#DC2626", fontSize: 12, marginTop: 4 }}>{errors.consultType}</div>}
                     </div>
 
-                    <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16, marginBottom: 18 }} className="g2">
+                    <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16, marginBottom: 6 }} className="g2">
                       <div>
                         <div style={{ fontSize: 13, fontWeight: 700, color: C.navy, marginBottom: 8 }}>Consultation Date</div>
-                        <input type="date" min={new Date().toISOString().split("T")[0]} value={form.date} onChange={(e) => setForm({ ...form, date: e.target.value })}
-                          style={{ padding: "13px 16px", border: `1.5px solid ${C.border}`, borderRadius: 10, fontSize: 14, outline: "none", fontFamily: "Poppins,sans-serif", width: "100%", color: C.text }}
-                          onFocus={(e) => (e.target.style.borderColor = C.gold)} onBlur={(e) => (e.target.style.borderColor = C.border)} />
+                        <input type="date" min={todayStr()} value={form.date}
+                          onChange={(e) => {
+                            const val = e.target.value;
+                            const newErrs = { ...errors, date: undefined, time: undefined };
+                            if (isPastDateStr(val)) newErrs.date = "Please select today or a future date.";
+                            else if (isSundayStr(val)) newErrs.date = "We're closed on Sundays. Please pick another date.";
+                            // Changing the date always resets the previously chosen time —
+                            // available slots depend on the date, so time must be re-selected.
+                            setForm({ ...form, date: val, time: "" });
+                            setErrors(newErrs);
+                          }}
+                          style={{ padding: "13px 16px", border: `1.5px solid ${errors.date ? "#DC2626" : C.border}`, borderRadius: 10, fontSize: 14, outline: "none", fontFamily: "Poppins,sans-serif", width: "100%", color: C.text }}
+                          onFocus={(e) => (e.target.style.borderColor = C.gold)} onBlur={(e) => (e.target.style.borderColor = errors.date ? "#DC2626" : C.border)} />
+                        {errors.date && <div style={{ color: "#DC2626", fontSize: 12, marginTop: 4 }}>{errors.date}</div>}
+                        {!errors.date && <div style={{ color: "#94A3B8", fontSize: 11, marginTop: 4 }}>We're open Mon–Sat, 11 AM – 5 PM.</div>}
                       </div>
                       <div>
                         <div style={{ fontSize: 13, fontWeight: 700, color: C.navy, marginBottom: 8 }}>Consultation Time</div>
-                        <select value={form.time} onChange={(e) => setForm({ ...form, time: e.target.value })}
-                          style={{ padding: "13px 16px", border: `1.5px solid ${C.border}`, borderRadius: 10, fontSize: 14, outline: "none", fontFamily: "Poppins,sans-serif", width: "100%", color: form.time ? C.text : "#94A3B8", background: "white" }}>
-                          <option value="">Select time slot</option>
-                          {["10:00 AM - 11:00 AM", "11:00 AM - 12:00 PM", "2:00 PM - 3:00 PM", "3:00 PM - 4:00 PM", "4:00 PM - 5:00 PM"].map((t) => <option key={t}>{t}</option>)}
-                        </select>
+                        {(() => {
+                          const dateReady = form.date && !isPastDateStr(form.date) && !isSundayStr(form.date);
+                          const slots = dateReady ? getAvailableSlots(form.date) : [];
+                          const disabled = !dateReady || slots.length === 0;
+                          return (
+                            <>
+                              <select value={form.time} disabled={disabled}
+                                onChange={(e) => { setForm({ ...form, time: e.target.value }); setErrors((er) => ({ ...er, time: undefined })); }}
+                                style={{ padding: "13px 16px", border: `1.5px solid ${errors.time ? "#DC2626" : C.border}`, borderRadius: 10, fontSize: 14, outline: "none", fontFamily: "Poppins,sans-serif", width: "100%", color: form.time ? C.text : "#94A3B8", background: disabled ? "#F1F5F9" : "white", cursor: disabled ? "not-allowed" : "pointer" }}>
+                                <option value="">{!dateReady ? "Select a date first" : slots.length === 0 ? "No slots left today" : "Select time slot"}</option>
+                                {slots.map((t) => <option key={t.label} value={t.label}>{t.label}</option>)}
+                              </select>
+                              {errors.time && <div style={{ color: "#DC2626", fontSize: 12, marginTop: 4 }}>{errors.time}</div>}
+                              {dateReady && slots.length === 0 && !errors.time && (
+                                <div style={{ color: "#DC2626", fontSize: 12, marginTop: 4 }}>No slots available today. Please choose another date.</div>
+                              )}
+                            </>
+                          );
+                        })()}
                       </div>
                     </div>
 
-                    <div style={{ marginBottom: 18 }}>
+                    <div style={{ marginBottom: 18, marginTop: 12 }}>
                       <div style={{ fontSize: 13, fontWeight: 700, color: C.navy, marginBottom: 10 }}>Visa Type</div>
                       <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }} className="g2">
                         {VISA_TYPES.map((o) => (
                           <label key={o.v} style={{ display: "flex", alignItems: "center", gap: 8, cursor: "pointer", fontSize: 14, color: C.text }}>
-                            <input type="radio" name="visaType" checked={form.visa === o.v} onChange={() => setForm({ ...form, visa: o.v })} style={{ accentColor: C.gold, width: 16, height: 16 }} />
+                            <input type="radio" name="visaType" checked={form.visa === o.v}
+                              onChange={() => { setForm({ ...form, visa: o.v }); setErrors((er) => ({ ...er, visa: undefined })); }}
+                              style={{ accentColor: C.gold, width: 16, height: 16 }} />
                             {o.l}
                           </label>
                         ))}
                       </div>
+                      {errors.visa && <div style={{ color: "#DC2626", fontSize: 12, marginTop: 4 }}>{errors.visa}</div>}
                     </div>
 
                     <div style={{ marginBottom: 20 }}>
@@ -555,7 +679,9 @@ export default function App(){
                       <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, marginBottom: 16 }} className="g2">
                         {POPULAR_COUNTRIES.map((c) => (
                           <label key={c} style={{ display: "flex", alignItems: "center", gap: 8, cursor: "pointer", fontSize: 14, color: C.text }}>
-                            <input type="checkbox" checked={form.countries.includes(c)} onChange={() => setForm({ ...form, countries: form.countries.includes(c) ? form.countries.filter((x) => x !== c) : [...form.countries, c] })} style={{ accentColor: C.gold, width: 16, height: 16 }} />
+                            <input type="checkbox" checked={form.countries.includes(c)}
+                              onChange={() => { setForm({ ...form, countries: form.countries.includes(c) ? form.countries.filter((x) => x !== c) : [...form.countries, c] }); setErrors((er) => ({ ...er, countries: undefined })); }}
+                              style={{ accentColor: C.gold, width: 16, height: 16 }} />
                             {c}
                           </label>
                         ))}
@@ -564,18 +690,39 @@ export default function App(){
                       <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, marginBottom: 16 }} className="g2">
                         {EUROPE_COUNTRIES.map((c) => (
                           <label key={c} style={{ display: "flex", alignItems: "center", gap: 8, cursor: "pointer", fontSize: 14, color: C.text }}>
-                            <input type="checkbox" checked={form.countries.includes(c)} onChange={() => setForm({ ...form, countries: form.countries.includes(c) ? form.countries.filter((x) => x !== c) : [...form.countries, c] })} style={{ accentColor: C.gold, width: 16, height: 16 }} />
+                            <input type="checkbox" checked={form.countries.includes(c)}
+                              onChange={() => { setForm({ ...form, countries: form.countries.includes(c) ? form.countries.filter((x) => x !== c) : [...form.countries, c] }); setErrors((er) => ({ ...er, countries: undefined })); }}
+                              style={{ accentColor: C.gold, width: 16, height: 16 }} />
                             {c}
                           </label>
                         ))}
                       </div>
-                      <input placeholder="Other country (optional)" value={form.otherCountry} onChange={(e) => setForm({ ...form, otherCountry: e.target.value })}
+                      <input placeholder="Other country (optional)" value={form.otherCountry}
+                        onChange={(e) => { setForm({ ...form, otherCountry: e.target.value }); setErrors((er) => ({ ...er, countries: undefined })); }}
                         style={{ padding: "13px 16px", border: `1.5px solid ${C.border}`, borderRadius: 10, fontSize: 14, outline: "none", fontFamily: "Poppins,sans-serif", width: "100%" }}
                         onFocus={(e) => (e.target.style.borderColor = C.gold)} onBlur={(e) => (e.target.style.borderColor = C.border)} />
+                      {errors.countries && <div style={{ color: "#DC2626", fontSize: 12, marginTop: 4 }}>{errors.countries}</div>}
                     </div>
 
-                    <GoldBtn style={{ width: "100%", padding: 16, fontSize: 16, borderRadius: 12, marginTop: 4 }} onClick={() => { if (form.name && form.email && form.phone) setSent(true); }}>
-                      ✦ Book Free Consultation
+                    <GoldBtn disabled={submitting} style={{ width: "100%", padding: 16, fontSize: 16, borderRadius: 12, marginTop: 4 }}
+                      onClick={() => {
+                        // Honeypot tripped — silently drop, don't tip off the bot.
+                        if (form.company) { setSent(true); return; }
+                        // Basic frontend rate limit / duplicate-click protection.
+                        const now = Date.now();
+                        if (submitting || now - lastSubmitRef.current < 3000) return;
+                        const errs = validateConsultationForm(form);
+                        setErrors(errs);
+                        if (Object.keys(errs).length > 0) return;
+                        lastSubmitRef.current = now;
+                        setSubmitting(true);
+                        // TODO: replace with real Resend email submission once connected.
+                        setTimeout(() => {
+                          setSubmitting(false);
+                          setSent(true);
+                        }, 1200);
+                      }}>
+                      {submitting ? "Sending..." : "✦ Book Free Consultation"}
                     </GoldBtn>
                     <p style={{ fontSize: 12, color: "#94A3B8", textAlign: "center", marginTop: 14 }}>No spam. No hidden charges. 100% free assessment.</p>
                   </motion.div>
