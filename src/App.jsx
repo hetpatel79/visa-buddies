@@ -176,7 +176,7 @@ const DESTINATIONS = [
   { f: "🇨🇦", n: "Canada", sub: "Study • Work • PR" },
   { f: "🇦🇺", n: "Australia", sub: "Study • Work • Migrate" },
   { f: "🇳🇿", n: "New Zealand", sub: "Work • PR • Lifestyle" },
-  { f: "🇬🇧", n: "United Kingdom", sub: "Study • Work • Settle" },
+  { f: "🇬🇧", n: "United Kingdom", sub: "Study • Work • Settle", formName: "UK" },
   { f: "🇺🇸", n: "USA", sub: "Study • Business • Travel" },
   { f: "🇩🇪", n: "Germany", sub: "Work • Engineering • Tech" },
   { f: "🇮🇪", n: "Ireland", sub: "Tech • Study • Work" },
@@ -363,9 +363,9 @@ export default function App(){
                 ))}
               </motion.div>
             </div>
-            <motion.div className="hide-mob" initial={{ opacity: 0, x: 60, scale: 0.9 }} animate={{ opacity: 1, x: 0, scale: 1 }} transition={{ duration: 0.9, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}>
+            <motion.div initial={{ opacity: 0, x: 0, scale: 0.95 }} animate={{ opacity: 1, x: 0, scale: 1 }} transition={{ duration: 0.9, delay: 0.2, ease: [0.22, 1, 0.36, 1] }} style={{ width: "100%" }}>
               <motion.div animate={{ y: [0, -14, 0] }} transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
-                style={{ background: "rgba(255,255,255,0.04)", backdropFilter: "blur(20px)", border: `1px solid ${C.gold}22`, borderRadius: 24, padding: 32, boxShadow: "0 32px 80px rgba(0,0,0,.5)", width: 300 }}>
+                style={{ background: "rgba(255,255,255,0.04)", backdropFilter: "blur(20px)", border: `1px solid ${C.gold}22`, borderRadius: 24, padding: 32, boxShadow: "0 32px 80px rgba(0,0,0,.5)", width: "100%", maxWidth: 300, marginLeft: "auto", marginRight: "auto" }}>
                 <div style={{ display: "flex", alignItems: "center", gap: 8, justifyContent: "center", marginBottom: 18 }}>
                   <span style={{ width: 8, height: 8, borderRadius: "50%", background: "#3ED598", display: "inline-block", boxShadow: "0 0 10px #3ED598" }} />
                   <span style={{ ...SH, color: C.goldL, fontSize: 13, fontWeight: 800, letterSpacing: "2px" }}>RECENT SUCCESS STORY</span>
@@ -459,9 +459,9 @@ export default function App(){
                 {sent ? (
                   <motion.div key="ok" initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0 }} style={{ textAlign: "center", padding: "32px 0" }}>
                     <motion.div animate={{ rotate: [0, 15, -15, 0], scale: [1, 1.2, 1] }} transition={{ duration: 0.8 }} style={{ fontSize: 60, marginBottom: 16 }}>🎉</motion.div>
-                    <h3 style={{ ...SH, fontSize: 24, fontWeight: 900, color: C.navy, marginBottom: 10 }}>Assessment Submitted!</h3>
+                    <h3 style={{ ...SH, fontSize: 24, fontWeight: 900, color: C.navy, marginBottom: 10 }}>Consultation Booked!</h3>
                     <p style={{ color: C.slate, fontSize: 15, marginBottom: 24 }}>Our visa expert will contact you within 24 hours.</p>
-                    <GoldBtn onClick={() => setSent(false)}>Submit Another</GoldBtn>
+                    <GoldBtn onClick={() => setSent(false)}>Book Another</GoldBtn>
                   </motion.div>
                 ) : (
                   <motion.div key="form" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
@@ -491,7 +491,7 @@ export default function App(){
                     <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16, marginBottom: 18 }} className="g2">
                       <div>
                         <div style={{ fontSize: 13, fontWeight: 700, color: C.navy, marginBottom: 8 }}>Consultation Date</div>
-                        <input type="date" value={form.date} onChange={(e) => setForm({ ...form, date: e.target.value })}
+                        <input type="date" min={new Date().toISOString().split("T")[0]} value={form.date} onChange={(e) => setForm({ ...form, date: e.target.value })}
                           style={{ padding: "13px 16px", border: `1.5px solid ${C.border}`, borderRadius: 10, fontSize: 14, outline: "none", fontFamily: "Poppins,sans-serif", width: "100%", color: C.text }}
                           onFocus={(e) => (e.target.style.borderColor = C.gold)} onBlur={(e) => (e.target.style.borderColor = C.border)} />
                       </div>
@@ -677,7 +677,7 @@ export default function App(){
             {DESTINATIONS.map((d, i) => (
               <motion.div key={d.n} variants={fadeUp(i * 0.06)}
                 whileHover={{ y: -6, boxShadow: `0 16px 40px ${C.gold}22`, borderColor: C.gold }}
-                onClick={() => { setForm((f) => ({ ...f, countries: f.countries.includes(d.n) ? f.countries : [...f.countries, d.n] })); go("assessment"); }}
+                onClick={() => { const cn = d.formName || d.n; setForm((f) => ({ ...f, countries: f.countries.includes(cn) ? f.countries : [...f.countries, cn] })); go("assessment"); }}
                 style={{ background: C.white, borderRadius: 18, padding: "28px 20px", border: `1px solid ${C.border}`, textAlign: "center", cursor: "pointer", transition: "all .25s" }}>
                 <motion.div whileHover={{ scale: 1.2 }} style={{ fontSize: 42, marginBottom: 14, display: "inline-block" }}>{d.f}</motion.div>
                 <div style={{ ...SH, fontSize: 15, fontWeight: 700, color: C.navy, marginBottom: 6 }}>{d.n}</div>
@@ -783,8 +783,12 @@ export default function App(){
               </div>
               <p style={{ color: "#64748B", fontSize: 14, lineHeight: 1.75, maxWidth: 240 }}>Your Dream. Our Plan. Better Future. India's trusted partner for international visa guidance.</p>
               <div style={{ marginTop: 20, display: "flex", gap: 10 }}>
-                {["📘", "📸", "▶️", "💬"].map((s, i) => (
-                  <motion.div key={i} whileHover={{ scale: 1.2, color: C.gold }} style={{ width: 36, height: 36, borderRadius: "50%", background: "rgba(255,255,255,0.05)", border: `1px solid ${C.gold}22`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 16, cursor: "pointer" }}>{s}</motion.div>
+                {[{ s: "📘", href: null }, { s: "📸", href: null }, { s: "▶️", href: null }, { s: "💬", href: WA_LINK }].map((it, i) => (
+                  it.href ? (
+                    <motion.a key={i} href={it.href} target="_blank" rel="noopener noreferrer" whileHover={{ scale: 1.2 }} style={{ width: 36, height: 36, borderRadius: "50%", background: "rgba(255,255,255,0.05)", border: `1px solid ${C.gold}22`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 16, cursor: "pointer", textDecoration: "none" }}>{it.s}</motion.a>
+                  ) : (
+                    <motion.div key={i} whileHover={{ scale: 1.2, color: C.gold }} style={{ width: 36, height: 36, borderRadius: "50%", background: "rgba(255,255,255,0.05)", border: `1px solid ${C.gold}22`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 16, opacity: 0.5 }}>{it.s}</motion.div>
+                  )
                 ))}
               </div>
             </div>
