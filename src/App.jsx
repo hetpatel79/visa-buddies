@@ -146,7 +146,7 @@ function Label({ children }) {
 }
 
 // ── Data ───────────────────────────────────────────────────────
-const NAV = ["Home", "About Us", "Study Abroad", "Work Visa", "Tourist Visa", "Business Visa", "PR", "Success Stories", "Blog", "Contact"];
+const NAV = ["Home", "About Us", "Study Abroad", "Work Visa", "Tourist Visa", "Business Visa", "PR", "Success Stories", "Contact"];
 const SERVICES = [
   { icon: "🎓", title: "Student Visa", desc: "Expert guidance from university selection to visa approval." },
   { icon: "💼", title: "Work Visa", desc: "Work permit pathways for NZ, Australia, UK, Europe & more." },
@@ -190,12 +190,6 @@ const FAQS = [
 ];
 const MARQUEE_ITEMS = ["🇨🇦 Canada PR", "🇦🇺 Australia Visa", "🇳🇿 New Zealand Work", "🇬🇧 UK Skilled Worker", "🇺🇸 USA Student", "🇩🇪 Germany Work", "🇸🇬 Singapore Business", "🇮🇪 Ireland Tech Visa", "Tourist Visa", "Business Visa", "Student Visa", "Work Permit"];
 const TRUST = ["Expert Guidance", "Licensed Consultants", "Transparent Process", "End-to-End Support", "Dedicated Case Manager", "High Success Rate"];
-const BLOGS = [
-  { f: "🇨🇦", title: "Canada Announces New Student Visa Updates", date: "June 2025" },
-  { f: "🇦🇺", title: "Australia's Work Visa Policy Changes", date: "May 2025" },
-  { f: "🇳🇿", title: "New Zealand Immigration News & Updates", date: "April 2025" },
-];
-
 // ── Accordion ──────────────────────────────────────────────────
 function Accordion({ items }) {
   const [open, setOpen] = useState(null);
@@ -705,29 +699,6 @@ export default function App(){
         </div>
       </section>
 
-      {/* ── BLOG ── */}
-      <section style={{ padding: "100px 24px", background: C.silver }}>
-        <div style={{ maxWidth: 1100, margin: "0 auto" }}>
-          <Reveal style={{ textAlign: "center", marginBottom: 52 }}>
-            <Label>Visa Updates</Label>
-            <h2 style={{ ...SH, fontSize: 38, fontWeight: 900, color: C.navy, marginBottom: 12 }}>Latest Visa News</h2>
-          </Reveal>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 24 }} className="g3">
-            {BLOGS.map((b, i) => (
-              <Reveal key={b.title} delay={i * 0.08}>
-                <motion.div whileHover={{ y: -5, boxShadow: `0 12px 32px ${C.gold}18`, borderColor: C.gold }}
-                  style={{ background: C.white, borderRadius: 18, padding: 28, border: `1px solid ${C.border}`, transition: "all .25s", cursor: "pointer" }}>
-                  <div style={{ fontSize: 40, marginBottom: 16 }}>{b.f}</div>
-                  <div style={{ fontSize: 11, color: C.gold, fontWeight: 700, letterSpacing: "1px", marginBottom: 10, textTransform: "uppercase" }}>{b.date}</div>
-                  <h3 style={{ ...SH, fontSize: 15, fontWeight: 700, color: C.navy, marginBottom: 16, lineHeight: 1.4 }}>{b.title}</h3>
-                  <motion.div whileHover={{ x: 4 }} style={{ color: C.gold, fontSize: 13, fontWeight: 700, cursor: "pointer" }}>Read More →</motion.div>
-                </motion.div>
-              </Reveal>
-            ))}
-          </div>
-        </div>
-      </section>
-
       {/* ── TRUST STRIP ── */}
       <div style={{ background: C.navy, padding: "24px", overflow: "hidden" }}>
         <Marquee items={TRUST.map((t) => `✦ ${t}`)} speed={5} reverse />
@@ -750,7 +721,7 @@ export default function App(){
               </div>
             </div>
             {[
-              { t: "Quick Links", ls: ["About", "Services", "Countries", "Blog", "Contact"] },
+              { t: "Quick Links", ls: ["About", "Services", "Countries", "Contact"] },
               { t: "Services", ls: ["Study Visa", "Work Visa", "Tourist Visa", "Business Visa", "PR"] },
             ].map((col) => (
               <div key={col.t}>
