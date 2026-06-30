@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { motion, useInView, useScroll, useTransform, AnimatePresence, useMotionValue, useAnimationFrame, wrap } from "framer-motion";
-import { LOGO } from "./logoData.js";
+import LOGO from "./assets/logo.jpg";
 import heroBg from "./assets/hero-bg.jpg";
 
 // ── Brand Colors (from brief) ──────────────────────────────────
@@ -678,8 +678,9 @@ export default function App(){
             </Reveal>
             <Reveal delay={0.1}>
               <div style={{ background: "rgba(255,255,255,0.04)", borderRadius: 24, padding: 36, border: `1px solid ${C.gold}22`, textAlign: "center" }}>
-                <motion.div animate={{ y: [0, -10, 0] }} transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}>
-                  <img src={LOGO} alt="Visa Buddies" style={{ width: "80%", margin: "0 auto", display: "block", filter: "drop-shadow(0 8px 24px rgba(200,155,60,0.4))" }} />
+                <motion.div animate={{ y: [0, -10, 0] }} transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+                  style={{ background: "white", borderRadius: 16, padding: 16, display: "inline-block", boxShadow: "0 8px 24px rgba(0,0,0,0.3)" }}>
+                  <img src={LOGO} alt="Visa Buddies" style={{ width: "100%", maxWidth: 220, display: "block" }} />
                 </motion.div>
                 <div style={{ ...SH, color: C.gold, fontSize: 13, letterSpacing: "2px", marginTop: 16 }}>YOUR DREAM. OUR PLAN.</div>
                 <div style={{ ...SH, color: C.goldL, fontSize: 11, letterSpacing: "2px", marginTop: 4 }}>BETTER FUTURE.</div>
@@ -738,7 +739,9 @@ export default function App(){
         <div style={{ maxWidth: 1100, margin: "0 auto", position: "relative", zIndex: 1 }}>
           <div style={{ display: "grid", gridTemplateColumns: "2fr 1fr 1fr 1.5fr", gap: 48, marginBottom: 48 }} className="g4">
             <div>
-              <img src={LOGO} alt="Visa Buddies" style={{ height: 64, marginBottom: 16, filter: "drop-shadow(0 4px 12px rgba(200,155,60,0.3))" }} />
+              <div style={{ background: "white", borderRadius: 12, padding: 10, display: "inline-block", marginBottom: 16 }}>
+                <img src={LOGO} alt="Visa Buddies" style={{ height: 56, display: "block" }} />
+              </div>
               <p style={{ color: "#64748B", fontSize: 14, lineHeight: 1.75, maxWidth: 240 }}>Your Dream. Our Plan. Better Future. India's trusted partner for international visa guidance since 2016.</p>
               <div style={{ marginTop: 20, display: "flex", gap: 10 }}>
                 {["📘", "📸", "▶️", "💬"].map((s, i) => (
