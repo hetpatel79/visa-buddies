@@ -288,7 +288,7 @@ export default function App(){
             ))}
           </div>
           <div className="hide-mob" style={{ display: "flex", gap: 10, alignItems: "center", flexShrink: 0 }}>
-            <GoldBtn onClick={() => go("assessment")} style={{ padding: "10px 18px", fontSize: 13 }}>Free Assessment</GoldBtn>
+            <GoldBtn onClick={() => go("assessment")} style={{ padding: "10px 18px", fontSize: 13 }}>Book Free Consultation</GoldBtn>
             <motion.button whileHover={{ scale: 1.04 }} whileTap={{ scale: 0.96 }} onClick={() => go("assessment")}
               style={{ background: C.navy, color: "white", border: "none", padding: "11px 18px", borderRadius: 8, fontSize: 13, fontWeight: 700, cursor: "pointer", ...BODY }}>
               Book Consultation
@@ -339,8 +339,7 @@ export default function App(){
               </motion.p>
               <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.38 }}
                 style={{ display: "flex", gap: 14, flexWrap: "wrap", marginBottom: 44 }}>
-                <GoldBtn onClick={() => go("assessment")} style={{ fontSize: 15, padding: "14px 28px" }}>✦ Apply Now</GoldBtn>
-                <GoldBtn outline onClick={() => go("assessment")} style={{ fontSize: 15, padding: "14px 28px" }}>Free Eligibility Check</GoldBtn>
+                <GoldBtn onClick={() => go("assessment")} style={{ fontSize: 15, padding: "14px 28px" }}>✦ Book Free Consultation</GoldBtn>
                 <motion.a href="https://wa.me/91XXXXXXXXXX" target="_blank" rel="noopener noreferrer" whileHover={{ scale: 1.04 }} whileTap={{ scale: 0.97 }}
                   style={{ display: "flex", alignItems: "center", gap: 8, padding: "14px 24px", borderRadius: 12, background: "#25D366", color: "white", fontWeight: 700, fontSize: 15, textDecoration: "none", fontFamily: "Poppins,sans-serif" }}>
                   💬 Chat on WhatsApp
@@ -523,10 +522,7 @@ export default function App(){
                       </div>
                     </div>
 
-                    <textarea placeholder="Tell us about your situation (optional)" rows={3} value={form.msg} onChange={(e) => setForm({ ...form, msg: e.target.value })}
-                      style={{ width: "100%", padding: "13px 16px", border: `1.5px solid ${C.border}`, borderRadius: 10, fontSize: 15, outline: "none", fontFamily: "Poppins,sans-serif", resize: "vertical", marginBottom: 20 }}
-                      onFocus={(e) => (e.target.style.borderColor = C.gold)} onBlur={(e) => (e.target.style.borderColor = C.border)} />
-                    <GoldBtn style={{ width: "100%", padding: 16, fontSize: 16, borderRadius: 12 }} onClick={() => { if (form.name && form.email && form.phone) setSent(true); }}>
+                    <GoldBtn style={{ width: "100%", padding: 16, fontSize: 16, borderRadius: 12, marginTop: 4 }} onClick={() => { if (form.name && form.email && form.phone) setSent(true); }}>
                       ✦ Book Free Consultation
                     </GoldBtn>
                     <p style={{ fontSize: 12, color: "#94A3B8", textAlign: "center", marginTop: 14 }}>No spam. No hidden charges. 100% free assessment.</p>
