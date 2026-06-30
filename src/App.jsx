@@ -293,17 +293,13 @@ export default function App(){
           <motion.div whileHover={{ scale: 1.03 }} style={{ cursor: "default", flexShrink: 0 }}>
             <img src={LOGO} alt="Visa Buddies" style={{ height: 52, width: "auto", objectFit: "contain" }} />
           </motion.div>
-          <div className="hide-mob" style={{ display: "flex", gap: 20, alignItems: "center", overflow: "hidden" }}>
-            {["Home", "About Us", "Study Abroad", "Work Visa", "Tourist Visa", "Success Stories", "Contact"].map((l) => (
+          <div className="hide-mob" style={{ display: "flex", gap: 14, alignItems: "center", overflowX: "auto", overflowY: "hidden", scrollbarWidth: "none", maxWidth: "56vw" }}>
+            {NAV.map((l) => (
               <span key={l} className="nav-a" onClick={() => go(NAV_TARGET[l] || l.toLowerCase().replace(/ /g, "-"))}>{l}</span>
             ))}
           </div>
           <div className="hide-mob" style={{ display: "flex", gap: 10, alignItems: "center", flexShrink: 0 }}>
             <GoldBtn onClick={() => go("assessment")} style={{ padding: "10px 18px", fontSize: 13 }}>Book Free Consultation</GoldBtn>
-            <motion.button whileHover={{ scale: 1.04 }} whileTap={{ scale: 0.96 }} onClick={() => go("assessment")}
-              style={{ background: C.navy, color: "white", border: "none", padding: "11px 18px", borderRadius: 8, fontSize: 13, fontWeight: 700, cursor: "pointer", ...BODY }}>
-              Book Consultation
-            </motion.button>
           </div>
           <button onClick={() => setMenuOpen(!menuOpen)} style={{ background: "none", border: "none", cursor: "pointer", padding: 6, display: "flex", flexDirection: "column", gap: 5 }}>
             {[0, 1, 2].map((i) => (
