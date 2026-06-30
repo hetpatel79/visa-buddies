@@ -341,6 +341,14 @@ export default function App(){
                 style={{ display: "flex", gap: 14, flexWrap: "wrap", marginBottom: 44 }}>
                 <GoldBtn onClick={() => go("assessment")} style={{ fontSize: 15, padding: "14px 28px" }}>✦ Apply Now</GoldBtn>
                 <GoldBtn outline onClick={() => go("assessment")} style={{ fontSize: 15, padding: "14px 28px" }}>Free Eligibility Check</GoldBtn>
+                <motion.a href="https://wa.me/91XXXXXXXXXX" target="_blank" rel="noopener noreferrer" whileHover={{ scale: 1.04 }} whileTap={{ scale: 0.97 }}
+                  style={{ display: "flex", alignItems: "center", gap: 8, padding: "14px 24px", borderRadius: 12, background: "#25D366", color: "white", fontWeight: 700, fontSize: 15, textDecoration: "none", fontFamily: "Poppins,sans-serif" }}>
+                  💬 Chat on WhatsApp
+                </motion.a>
+                <motion.a href="tel:+91XXXXXXXXXX" whileHover={{ scale: 1.04 }} whileTap={{ scale: 0.97 }}
+                  style={{ display: "flex", alignItems: "center", gap: 8, padding: "14px 24px", borderRadius: 12, border: `1.5px solid ${C.gold}55`, color: C.goldL, fontWeight: 700, fontSize: 15, textDecoration: "none", fontFamily: "Poppins,sans-serif" }}>
+                  📞 Call Expert
+                </motion.a>
               </motion.div>
               <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.5 }}
                 style={{ display: "flex", flexWrap: "wrap", gap: 16 }}>
@@ -352,27 +360,24 @@ export default function App(){
             <motion.div className="hide-mob" initial={{ opacity: 0, x: 60, scale: 0.9 }} animate={{ opacity: 1, x: 0, scale: 1 }} transition={{ duration: 0.9, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}>
               <motion.div animate={{ y: [0, -14, 0] }} transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
                 style={{ background: "rgba(255,255,255,0.04)", backdropFilter: "blur(20px)", border: `1px solid ${C.gold}22`, borderRadius: 24, padding: 32, boxShadow: "0 32px 80px rgba(0,0,0,.5)", width: 300 }}>
-                <img src={LOGO} alt="Visa Buddies" style={{ width: "100%", marginBottom: 20, filter: "drop-shadow(0 4px 16px rgba(200,155,60,0.3))" }} />
-                <div style={{ ...SH, textAlign: "center", color: C.gold, fontSize: 11, fontWeight: 700, letterSpacing: "2px", marginBottom: 4 }}>YOUR DREAM. OUR PLAN.</div>
-                <div style={{ ...SH, textAlign: "center", color: C.goldL, fontSize: 10, letterSpacing: "2px" }}>BETTER FUTURE.</div>
-                <div style={{ marginTop: 22, paddingTop: 18, borderTop: `1px solid ${C.gold}22` }}>
-                  <div style={{ display: "flex", alignItems: "center", gap: 6, justifyContent: "center", marginBottom: 12 }}>
-                    <span style={{ width: 6, height: 6, borderRadius: "50%", background: "#3ED598", display: "inline-block", boxShadow: "0 0 8px #3ED598" }} />
-                    <span style={{ color: C.goldL, fontSize: 10, fontWeight: 700, letterSpacing: "1.5px" }}>RECENT SUCCESS STORY</span>
-                  </div>
+                <div style={{ display: "flex", alignItems: "center", gap: 8, justifyContent: "center", marginBottom: 18 }}>
+                  <span style={{ width: 8, height: 8, borderRadius: "50%", background: "#3ED598", display: "inline-block", boxShadow: "0 0 10px #3ED598" }} />
+                  <span style={{ ...SH, color: C.goldL, fontSize: 13, fontWeight: 800, letterSpacing: "2px" }}>RECENT SUCCESS STORY</span>
+                </div>
+                <div style={{ paddingTop: 0 }}>
                   <AnimatePresence mode="wait">
                     <motion.div key={storyIdx} initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -14 }} transition={{ duration: 0.5, ease: "easeOut" }}
-                      style={{ background: `${C.gold}0C`, border: `1px solid ${C.gold}20`, borderRadius: 14, padding: "16px 16px" }}>
-                      <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 10 }}>
-                        <div style={{ width: 34, height: 34, borderRadius: "50%", background: `linear-gradient(135deg,${C.gold},${C.goldL})`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 12, fontWeight: 700, color: C.navy, flexShrink: 0 }}>
+                      style={{ background: `${C.gold}10`, border: `1px solid ${C.gold}30`, borderRadius: 16, padding: "20px 18px" }}>
+                      <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 14 }}>
+                        <div style={{ width: 44, height: 44, borderRadius: "50%", background: `linear-gradient(135deg,${C.gold},${C.goldL})`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 15, fontWeight: 800, color: C.navy, flexShrink: 0 }}>
                           {TESTIMONIALS[storyIdx].av}
                         </div>
                         <div>
-                          <div style={{ fontSize: 13, fontWeight: 700, color: "white" }}>{TESTIMONIALS[storyIdx].name}</div>
-                          <div style={{ fontSize: 11, color: C.goldL }}>{TESTIMONIALS[storyIdx].visa}</div>
+                          <div style={{ fontSize: 16, fontWeight: 800, color: "white" }}>{TESTIMONIALS[storyIdx].name}</div>
+                          <div style={{ fontSize: 12, color: C.goldL, fontWeight: 600 }}>✓ {TESTIMONIALS[storyIdx].visa}</div>
                         </div>
                       </div>
-                      <div style={{ fontSize: 12, color: "rgba(255,255,255,0.75)", lineHeight: 1.5 }}>
+                      <div style={{ fontSize: 13.5, color: "rgba(255,255,255,0.85)", lineHeight: 1.6 }}>
                         "{TESTIMONIALS[storyIdx].text}"
                       </div>
                     </motion.div>
@@ -398,6 +403,140 @@ export default function App(){
       <div style={{ background: C.navy, padding: "3px 0", overflow: "hidden" }}>
         <Marquee items={MARQUEE_ITEMS} speed={7} />
       </div>
+
+      {/* ── TESTIMONIALS ── */}
+      <section id="success-stories" style={{ padding: "100px 24px", background: C.silver }}>
+        <div style={{ maxWidth: 1100, margin: "0 auto" }}>
+          <Reveal style={{ textAlign: "center", marginBottom: 56 }}>
+            <Label>Success Stories</Label>
+            <h2 style={{ ...SH, fontSize: 38, fontWeight: 900, color: C.navy, marginBottom: 12 }}>What Our Clients Say</h2>
+          </Reveal>
+          <motion.div variants={containerV} initial="hidden" whileInView="show" viewport={{ once: true }}
+            style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 24 }} className="g3">
+            {TESTIMONIALS.map((t, i) => (
+              <motion.div key={t.name} variants={fadeUp(i * 0.09)}
+                whileHover={{ y: -6, boxShadow: `0 16px 40px ${C.gold}18`, borderColor: C.gold }}
+                style={{ background: C.white, borderRadius: 20, padding: 30, border: `1px solid ${C.border}`, transition: "all .25s" }}>
+                <div style={{ display: "flex", gap: 4, marginBottom: 14 }}>
+                  {[...Array(5)].map((_, j) => (
+                    <motion.span key={j} animate={{ textShadow: ["0 0 0px transparent", `0 0 10px ${C.gold}88`, "0 0 0px transparent"] }} transition={{ duration: 2, repeat: Infinity, delay: j * 0.15 + i * 0.3 }}
+                      style={{ color: C.gold, fontSize: 16 }}>★</motion.span>
+                  ))}
+                </div>
+                <motion.div animate={{ rotate: [0, 3, -3, 0] }} transition={{ duration: 5, repeat: Infinity, delay: i }} style={{ fontSize: 36, color: C.gold, lineHeight: 1, marginBottom: 10, display: "inline-block", fontFamily: "Georgia,serif" }}>"</motion.div>
+                <p style={{ ...SUB, fontSize: 14.5, color: C.text, lineHeight: 1.75, marginBottom: 20, fontStyle: "italic" }}>{t.text}</p>
+                <div style={{ display: "flex", alignItems: "center", gap: 12, paddingTop: 16, borderTop: `1px solid ${C.border}` }}>
+                  <div style={{ width: 44, height: 44, background: `linear-gradient(135deg,${C.navy},${C.gold})`, borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", color: C.white, fontSize: 14, fontWeight: 800, flexShrink: 0 }}>{t.av}</div>
+                  <div>
+                    <div style={{ ...SH, fontWeight: 700, fontSize: 14, color: C.navy }}>{t.name}</div>
+                    <div style={{ fontSize: 12, color: C.slate }}>{t.visa}</div>
+                  </div>
+                </div>
+              </motion.div>
+            ))}
+          </motion.div>
+        </div>
+      </section>
+
+      {/* ── ASSESSMENT FORM ── */}
+      <section id="assessment" style={{ padding: "100px 24px", background: `linear-gradient(135deg,${C.gold}18,${C.goldL}08,${C.gold}18)`, position: "relative", overflow: "hidden" }}>
+        <Stars count={20} />
+        <div style={{ maxWidth: 700, margin: "0 auto", position: "relative", zIndex: 1 }}>
+          <Reveal style={{ textAlign: "center", marginBottom: 44 }}>
+            <Label>Get Started</Label>
+            <h2 style={{ ...SH, fontSize: 38, fontWeight: 900, color: C.navy, marginBottom: 12 }}>Book Free Consultation</h2>
+            <p style={{ ...SUB, color: C.slate, fontSize: 15, fontStyle: "italic" }}>Fill in your details and our experts will contact you within 24 hours.</p>
+          </Reveal>
+          <Reveal delay={0.1}>
+            <div style={{ background: C.white, borderRadius: 24, padding: 40, boxShadow: `0 20px 60px ${C.gold}22`, border: `1px solid ${C.gold}22` }}>
+              <AnimatePresence mode="wait">
+                {sent ? (
+                  <motion.div key="ok" initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0 }} style={{ textAlign: "center", padding: "32px 0" }}>
+                    <motion.div animate={{ rotate: [0, 15, -15, 0], scale: [1, 1.2, 1] }} transition={{ duration: 0.8 }} style={{ fontSize: 60, marginBottom: 16 }}>🎉</motion.div>
+                    <h3 style={{ ...SH, fontSize: 24, fontWeight: 900, color: C.navy, marginBottom: 10 }}>Assessment Submitted!</h3>
+                    <p style={{ color: C.slate, fontSize: 15, marginBottom: 24 }}>Our visa expert will contact you within 24 hours.</p>
+                    <GoldBtn onClick={() => setSent(false)}>Submit Another</GoldBtn>
+                  </motion.div>
+                ) : (
+                  <motion.div key="form" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
+                    <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16, marginBottom: 16 }} className="g2">
+                      {[{ ph: "Full Name *", k: "name", t: "text" }, { ph: "Phone Number *", k: "phone", t: "tel" }].map((f) => (
+                        <input key={f.k} placeholder={f.ph} type={f.t} value={form[f.k]} onChange={(e) => setForm({ ...form, [f.k]: e.target.value })}
+                          style={{ padding: "13px 16px", border: `1.5px solid ${C.border}`, borderRadius: 10, fontSize: 15, outline: "none", fontFamily: "Poppins,sans-serif", width: "100%" }}
+                          onFocus={(e) => (e.target.style.borderColor = C.gold)} onBlur={(e) => (e.target.style.borderColor = C.border)} />
+                      ))}
+                    </div>
+                    <input placeholder="Email Address *" type="email" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })}
+                      style={{ padding: "13px 16px", border: `1.5px solid ${C.border}`, borderRadius: 10, fontSize: 15, outline: "none", fontFamily: "Poppins,sans-serif", width: "100%", marginBottom: 16 }}
+                      onFocus={(e) => (e.target.style.borderColor = C.gold)} onBlur={(e) => (e.target.style.borderColor = C.border)} />
+
+                    <div style={{ marginBottom: 18 }}>
+                      <div style={{ fontSize: 13, fontWeight: 700, color: C.navy, marginBottom: 10 }}>Consultation Type</div>
+                      <div style={{ display: "flex", gap: 20 }}>
+                        {[{ v: "call", l: "📞 Schedule a Call" }, { v: "visit", l: "📍 Schedule a Visit" }].map((o) => (
+                          <label key={o.v} style={{ display: "flex", alignItems: "center", gap: 8, cursor: "pointer", fontSize: 14, color: C.text }}>
+                            <input type="radio" name="consultType" checked={form.consultType === o.v} onChange={() => setForm({ ...form, consultType: o.v })} style={{ accentColor: C.gold, width: 16, height: 16 }} />
+                            {o.l}
+                          </label>
+                        ))}
+                      </div>
+                    </div>
+
+                    <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16, marginBottom: 18 }} className="g2">
+                      <div>
+                        <div style={{ fontSize: 13, fontWeight: 700, color: C.navy, marginBottom: 8 }}>Consultation Date</div>
+                        <input type="date" value={form.date} onChange={(e) => setForm({ ...form, date: e.target.value })}
+                          style={{ padding: "13px 16px", border: `1.5px solid ${C.border}`, borderRadius: 10, fontSize: 14, outline: "none", fontFamily: "Poppins,sans-serif", width: "100%", color: C.text }}
+                          onFocus={(e) => (e.target.style.borderColor = C.gold)} onBlur={(e) => (e.target.style.borderColor = C.border)} />
+                      </div>
+                      <div>
+                        <div style={{ fontSize: 13, fontWeight: 700, color: C.navy, marginBottom: 8 }}>Consultation Time</div>
+                        <select value={form.time} onChange={(e) => setForm({ ...form, time: e.target.value })}
+                          style={{ padding: "13px 16px", border: `1.5px solid ${C.border}`, borderRadius: 10, fontSize: 14, outline: "none", fontFamily: "Poppins,sans-serif", width: "100%", color: form.time ? C.text : "#94A3B8", background: "white" }}>
+                          <option value="">Select time slot</option>
+                          {["10:00 AM - 11:00 AM", "11:00 AM - 12:00 PM", "2:00 PM - 3:00 PM", "3:00 PM - 4:00 PM", "4:00 PM - 5:00 PM"].map((t) => <option key={t}>{t}</option>)}
+                        </select>
+                      </div>
+                    </div>
+
+                    <div style={{ marginBottom: 18 }}>
+                      <div style={{ fontSize: 13, fontWeight: 700, color: C.navy, marginBottom: 10 }}>Visa Type</div>
+                      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }} className="g2">
+                        {VISA_TYPES.map((o) => (
+                          <label key={o.v} style={{ display: "flex", alignItems: "center", gap: 8, cursor: "pointer", fontSize: 14, color: C.text }}>
+                            <input type="radio" name="visaType" checked={form.visa === o.v} onChange={() => setForm({ ...form, visa: o.v })} style={{ accentColor: C.gold, width: 16, height: 16 }} />
+                            {o.l}
+                          </label>
+                        ))}
+                      </div>
+                    </div>
+
+                    <div style={{ marginBottom: 20 }}>
+                      <div style={{ fontSize: 13, fontWeight: 700, color: C.navy, marginBottom: 10 }}>Interested Countries</div>
+                      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }} className="g2">
+                        {COUNTRY_LIST.map((c) => (
+                          <label key={c} style={{ display: "flex", alignItems: "center", gap: 8, cursor: "pointer", fontSize: 14, color: C.text }}>
+                            <input type="checkbox" checked={form.countries.includes(c)} onChange={() => setForm({ ...form, countries: form.countries.includes(c) ? form.countries.filter((x) => x !== c) : [...form.countries, c] })} style={{ accentColor: C.gold, width: 16, height: 16 }} />
+                            {c}
+                          </label>
+                        ))}
+                      </div>
+                    </div>
+
+                    <textarea placeholder="Tell us about your situation (optional)" rows={3} value={form.msg} onChange={(e) => setForm({ ...form, msg: e.target.value })}
+                      style={{ width: "100%", padding: "13px 16px", border: `1.5px solid ${C.border}`, borderRadius: 10, fontSize: 15, outline: "none", fontFamily: "Poppins,sans-serif", resize: "vertical", marginBottom: 20 }}
+                      onFocus={(e) => (e.target.style.borderColor = C.gold)} onBlur={(e) => (e.target.style.borderColor = C.border)} />
+                    <GoldBtn style={{ width: "100%", padding: 16, fontSize: 16, borderRadius: 12 }} onClick={() => { if (form.name && form.email && form.phone) setSent(true); }}>
+                      ✦ Book Free Consultation
+                    </GoldBtn>
+                    <p style={{ fontSize: 12, color: "#94A3B8", textAlign: "center", marginTop: 14 }}>No spam. No hidden charges. 100% free assessment.</p>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+          </Reveal>
+        </div>
+      </section>
 
       {/* ── WHY VISA BUDDIES ── */}
       <section id="about-us" style={{ padding: "100px 24px", background: C.white }}>
@@ -545,40 +684,6 @@ export default function App(){
         </div>
       </section>
 
-      {/* ── TESTIMONIALS ── */}
-      <section id="success-stories" style={{ padding: "100px 24px", background: C.silver }}>
-        <div style={{ maxWidth: 1100, margin: "0 auto" }}>
-          <Reveal style={{ textAlign: "center", marginBottom: 56 }}>
-            <Label>Success Stories</Label>
-            <h2 style={{ ...SH, fontSize: 38, fontWeight: 900, color: C.navy, marginBottom: 12 }}>What Our Clients Say</h2>
-          </Reveal>
-          <motion.div variants={containerV} initial="hidden" whileInView="show" viewport={{ once: true }}
-            style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 24 }} className="g3">
-            {TESTIMONIALS.map((t, i) => (
-              <motion.div key={t.name} variants={fadeUp(i * 0.09)}
-                whileHover={{ y: -6, boxShadow: `0 16px 40px ${C.gold}18`, borderColor: C.gold }}
-                style={{ background: C.white, borderRadius: 20, padding: 30, border: `1px solid ${C.border}`, transition: "all .25s" }}>
-                <div style={{ display: "flex", gap: 4, marginBottom: 14 }}>
-                  {[...Array(5)].map((_, j) => (
-                    <motion.span key={j} animate={{ textShadow: ["0 0 0px transparent", `0 0 10px ${C.gold}88`, "0 0 0px transparent"] }} transition={{ duration: 2, repeat: Infinity, delay: j * 0.15 + i * 0.3 }}
-                      style={{ color: C.gold, fontSize: 16 }}>★</motion.span>
-                  ))}
-                </div>
-                <motion.div animate={{ rotate: [0, 3, -3, 0] }} transition={{ duration: 5, repeat: Infinity, delay: i }} style={{ fontSize: 36, color: C.gold, lineHeight: 1, marginBottom: 10, display: "inline-block", fontFamily: "Georgia,serif" }}>"</motion.div>
-                <p style={{ ...SUB, fontSize: 14.5, color: C.text, lineHeight: 1.75, marginBottom: 20, fontStyle: "italic" }}>{t.text}</p>
-                <div style={{ display: "flex", alignItems: "center", gap: 12, paddingTop: 16, borderTop: `1px solid ${C.border}` }}>
-                  <div style={{ width: 44, height: 44, background: `linear-gradient(135deg,${C.navy},${C.gold})`, borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", color: C.white, fontSize: 14, fontWeight: 800, flexShrink: 0 }}>{t.av}</div>
-                  <div>
-                    <div style={{ ...SH, fontWeight: 700, fontSize: 14, color: C.navy }}>{t.name}</div>
-                    <div style={{ fontSize: 12, color: C.slate }}>{t.visa}</div>
-                  </div>
-                </div>
-              </motion.div>
-            ))}
-          </motion.div>
-        </div>
-      </section>
-
       {/* ── FAQ ── */}
       <section style={{ padding: "100px 24px", background: C.white }}>
         <div style={{ maxWidth: 800, margin: "0 auto" }}>
@@ -587,106 +692,6 @@ export default function App(){
             <h2 style={{ ...SH, fontSize: 38, fontWeight: 900, color: C.navy, marginBottom: 12 }}>Frequently Asked Questions</h2>
           </Reveal>
           <Accordion items={FAQS} />
-        </div>
-      </section>
-
-      {/* ── ASSESSMENT FORM ── */}
-      <section id="assessment" style={{ padding: "100px 24px", background: `linear-gradient(135deg,${C.gold}18,${C.goldL}08,${C.gold}18)`, position: "relative", overflow: "hidden" }}>
-        <Stars count={20} />
-        <div style={{ maxWidth: 700, margin: "0 auto", position: "relative", zIndex: 1 }}>
-          <Reveal style={{ textAlign: "center", marginBottom: 44 }}>
-            <Label>Get Started</Label>
-            <h2 style={{ ...SH, fontSize: 38, fontWeight: 900, color: C.navy, marginBottom: 12 }}>Book Free Consultation</h2>
-            <p style={{ ...SUB, color: C.slate, fontSize: 15, fontStyle: "italic" }}>Fill in your details and our experts will contact you within 24 hours.</p>
-          </Reveal>
-          <Reveal delay={0.1}>
-            <div style={{ background: C.white, borderRadius: 24, padding: 40, boxShadow: `0 20px 60px ${C.gold}22`, border: `1px solid ${C.gold}22` }}>
-              <AnimatePresence mode="wait">
-                {sent ? (
-                  <motion.div key="ok" initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0 }} style={{ textAlign: "center", padding: "32px 0" }}>
-                    <motion.div animate={{ rotate: [0, 15, -15, 0], scale: [1, 1.2, 1] }} transition={{ duration: 0.8 }} style={{ fontSize: 60, marginBottom: 16 }}>🎉</motion.div>
-                    <h3 style={{ ...SH, fontSize: 24, fontWeight: 900, color: C.navy, marginBottom: 10 }}>Assessment Submitted!</h3>
-                    <p style={{ color: C.slate, fontSize: 15, marginBottom: 24 }}>Our visa expert will contact you within 24 hours.</p>
-                    <GoldBtn onClick={() => setSent(false)}>Submit Another</GoldBtn>
-                  </motion.div>
-                ) : (
-                  <motion.div key="form" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
-                    <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16, marginBottom: 16 }} className="g2">
-                      {[{ ph: "Full Name *", k: "name", t: "text" }, { ph: "Phone Number *", k: "phone", t: "tel" }].map((f) => (
-                        <input key={f.k} placeholder={f.ph} type={f.t} value={form[f.k]} onChange={(e) => setForm({ ...form, [f.k]: e.target.value })}
-                          style={{ padding: "13px 16px", border: `1.5px solid ${C.border}`, borderRadius: 10, fontSize: 15, outline: "none", fontFamily: "Poppins,sans-serif", width: "100%" }}
-                          onFocus={(e) => (e.target.style.borderColor = C.gold)} onBlur={(e) => (e.target.style.borderColor = C.border)} />
-                      ))}
-                    </div>
-                    <input placeholder="Email Address *" type="email" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })}
-                      style={{ padding: "13px 16px", border: `1.5px solid ${C.border}`, borderRadius: 10, fontSize: 15, outline: "none", fontFamily: "Poppins,sans-serif", width: "100%", marginBottom: 16 }}
-                      onFocus={(e) => (e.target.style.borderColor = C.gold)} onBlur={(e) => (e.target.style.borderColor = C.border)} />
-
-                    <div style={{ marginBottom: 18 }}>
-                      <div style={{ fontSize: 13, fontWeight: 700, color: C.navy, marginBottom: 10 }}>Consultation Type</div>
-                      <div style={{ display: "flex", gap: 20 }}>
-                        {[{ v: "call", l: "📞 Schedule a Call" }, { v: "visit", l: "📍 Schedule a Visit" }].map((o) => (
-                          <label key={o.v} style={{ display: "flex", alignItems: "center", gap: 8, cursor: "pointer", fontSize: 14, color: C.text }}>
-                            <input type="radio" name="consultType" checked={form.consultType === o.v} onChange={() => setForm({ ...form, consultType: o.v })} style={{ accentColor: C.gold, width: 16, height: 16 }} />
-                            {o.l}
-                          </label>
-                        ))}
-                      </div>
-                    </div>
-
-                    <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16, marginBottom: 18 }} className="g2">
-                      <div>
-                        <div style={{ fontSize: 13, fontWeight: 700, color: C.navy, marginBottom: 8 }}>Consultation Date</div>
-                        <input type="date" value={form.date} onChange={(e) => setForm({ ...form, date: e.target.value })}
-                          style={{ padding: "13px 16px", border: `1.5px solid ${C.border}`, borderRadius: 10, fontSize: 14, outline: "none", fontFamily: "Poppins,sans-serif", width: "100%", color: C.text }}
-                          onFocus={(e) => (e.target.style.borderColor = C.gold)} onBlur={(e) => (e.target.style.borderColor = C.border)} />
-                      </div>
-                      <div>
-                        <div style={{ fontSize: 13, fontWeight: 700, color: C.navy, marginBottom: 8 }}>Consultation Time</div>
-                        <select value={form.time} onChange={(e) => setForm({ ...form, time: e.target.value })}
-                          style={{ padding: "13px 16px", border: `1.5px solid ${C.border}`, borderRadius: 10, fontSize: 14, outline: "none", fontFamily: "Poppins,sans-serif", width: "100%", color: form.time ? C.text : "#94A3B8", background: "white" }}>
-                          <option value="">Select time slot</option>
-                          {["10:00 AM - 11:00 AM", "11:00 AM - 12:00 PM", "2:00 PM - 3:00 PM", "3:00 PM - 4:00 PM", "4:00 PM - 5:00 PM"].map((t) => <option key={t}>{t}</option>)}
-                        </select>
-                      </div>
-                    </div>
-
-                    <div style={{ marginBottom: 18 }}>
-                      <div style={{ fontSize: 13, fontWeight: 700, color: C.navy, marginBottom: 10 }}>Visa Type</div>
-                      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }} className="g2">
-                        {VISA_TYPES.map((o) => (
-                          <label key={o.v} style={{ display: "flex", alignItems: "center", gap: 8, cursor: "pointer", fontSize: 14, color: C.text }}>
-                            <input type="radio" name="visaType" checked={form.visa === o.v} onChange={() => setForm({ ...form, visa: o.v })} style={{ accentColor: C.gold, width: 16, height: 16 }} />
-                            {o.l}
-                          </label>
-                        ))}
-                      </div>
-                    </div>
-
-                    <div style={{ marginBottom: 20 }}>
-                      <div style={{ fontSize: 13, fontWeight: 700, color: C.navy, marginBottom: 10 }}>Interested Countries</div>
-                      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }} className="g2">
-                        {COUNTRY_LIST.map((c) => (
-                          <label key={c} style={{ display: "flex", alignItems: "center", gap: 8, cursor: "pointer", fontSize: 14, color: C.text }}>
-                            <input type="checkbox" checked={form.countries.includes(c)} onChange={() => setForm({ ...form, countries: form.countries.includes(c) ? form.countries.filter((x) => x !== c) : [...form.countries, c] })} style={{ accentColor: C.gold, width: 16, height: 16 }} />
-                            {c}
-                          </label>
-                        ))}
-                      </div>
-                    </div>
-
-                    <textarea placeholder="Tell us about your situation (optional)" rows={3} value={form.msg} onChange={(e) => setForm({ ...form, msg: e.target.value })}
-                      style={{ width: "100%", padding: "13px 16px", border: `1.5px solid ${C.border}`, borderRadius: 10, fontSize: 15, outline: "none", fontFamily: "Poppins,sans-serif", resize: "vertical", marginBottom: 20 }}
-                      onFocus={(e) => (e.target.style.borderColor = C.gold)} onBlur={(e) => (e.target.style.borderColor = C.border)} />
-                    <GoldBtn style={{ width: "100%", padding: 16, fontSize: 16, borderRadius: 12 }} onClick={() => { if (form.name && form.email && form.phone) setSent(true); }}>
-                      ✦ Book Free Consultation
-                    </GoldBtn>
-                    <p style={{ fontSize: 12, color: "#94A3B8", textAlign: "center", marginTop: 14 }}>No spam. No hidden charges. 100% free assessment.</p>
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </div>
-          </Reveal>
         </div>
       </section>
 
