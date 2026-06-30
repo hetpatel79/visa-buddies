@@ -262,6 +262,7 @@ export default function App(){
         @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;900&family=Playfair+Display:wght@400;600;700;900&family=Poppins:wght@300;400;500;600;700&display=swap');
         *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
         html{scroll-behavior:smooth;}
+        section[id],footer[id]{scroll-margin-top:84px;}
         ::-webkit-scrollbar{width:5px}
         ::-webkit-scrollbar-track{background:${C.navy}}
         ::-webkit-scrollbar-thumb{background:${C.gold};border-radius:99px}
@@ -591,9 +592,10 @@ export default function App(){
             <Label>Our Specializations</Label>
             <h2 style={{ ...SH, fontSize: 38, fontWeight: 900, color: C.navy, marginBottom: 12 }}>Visa Categories We Handle</h2>
           </Reveal>
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 28 }} className="g3">
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr 1fr", gap: 24 }} className="g4">
             {[
               { id: "study-abroad", icon: "🎓", title: "Study Abroad", desc: "From shortlisting universities to securing your student visa, we guide you through every step — SOPs, LORs, financial documentation, and interview prep — for top study destinations including Canada, UK, Australia, and Europe." },
+              { id: "work-visa", icon: "💼", title: "Work Visa", desc: "Work permit pathways for skilled professionals heading to New Zealand, Australia, UK, Europe, and beyond — we handle job offer documentation, sponsorships, and application filing end-to-end." },
               { id: "business-visa", icon: "🏢", title: "Business Visa", desc: "Whether you're attending a conference, exploring investment opportunities, or visiting business partners abroad, our team handles documentation and applications for business and investor visas across major economies." },
               { id: "pr", icon: "🛂", title: "Permanent Residency (PR)", desc: "Settle abroad for good. We help you navigate points-based and employer-sponsored PR pathways for Canada, Australia, New Zealand, and the UK — from eligibility assessment to final approval." },
             ].map((c, i) => (
@@ -691,7 +693,7 @@ export default function App(){
       </section>
 
       {/* ── PROCESS TIMELINE ── */}
-      <section id="work-visa" style={{ padding: "100px 24px", background: C.white }}>
+      <section style={{ padding: "100px 24px", background: C.white }}>
         <div style={{ maxWidth: 900, margin: "0 auto" }}>
           <Reveal style={{ textAlign: "center", marginBottom: 56 }}>
             <Label>Our Services</Label>
