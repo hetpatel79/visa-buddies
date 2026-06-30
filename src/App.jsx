@@ -585,7 +585,7 @@ export default function App(){
       </section>
 
       {/* ── VISA CATEGORIES ── */}
-      <section style={{ padding: "100px 24px", background: C.white }}>
+      <section id="services" style={{ padding: "100px 24px", background: C.white }}>
         <div style={{ maxWidth: 1100, margin: "0 auto" }}>
           <Reveal style={{ textAlign: "center", marginBottom: 52 }}>
             <Label>Our Specializations</Label>
@@ -675,6 +675,7 @@ export default function App(){
             {DESTINATIONS.map((d, i) => (
               <motion.div key={d.n} variants={fadeUp(i * 0.06)}
                 whileHover={{ y: -6, boxShadow: `0 16px 40px ${C.gold}22`, borderColor: C.gold }}
+                onClick={() => { setForm((f) => ({ ...f, countries: f.countries.includes(d.n) ? f.countries : [...f.countries, d.n] })); go("assessment"); }}
                 style={{ background: C.white, borderRadius: 18, padding: "28px 20px", border: `1px solid ${C.border}`, textAlign: "center", cursor: "pointer", transition: "all .25s" }}>
                 <motion.div whileHover={{ scale: 1.2 }} style={{ fontSize: 42, marginBottom: 14, display: "inline-block" }}>{d.f}</motion.div>
                 <div style={{ ...SH, fontSize: 15, fontWeight: 700, color: C.navy, marginBottom: 6 }}>{d.n}</div>
@@ -778,7 +779,7 @@ export default function App(){
               <div style={{ background: "white", borderRadius: 12, padding: 10, display: "inline-block", marginBottom: 16 }}>
                 <img src={LOGO} alt="Visa Buddies" style={{ height: 56, display: "block" }} />
               </div>
-              <p style={{ color: "#64748B", fontSize: 14, lineHeight: 1.75, maxWidth: 240 }}>Your Dream. Our Plan. Better Future. India's trusted partner for international visa guidance since 2016.</p>
+              <p style={{ color: "#64748B", fontSize: 14, lineHeight: 1.75, maxWidth: 240 }}>Your Dream. Our Plan. Better Future. India's trusted partner for international visa guidance.</p>
               <div style={{ marginTop: 20, display: "flex", gap: 10 }}>
                 {["📘", "📸", "▶️", "💬"].map((s, i) => (
                   <motion.div key={i} whileHover={{ scale: 1.2, color: C.gold }} style={{ width: 36, height: 36, borderRadius: "50%", background: "rgba(255,255,255,0.05)", border: `1px solid ${C.gold}22`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 16, cursor: "pointer" }}>{s}</motion.div>
@@ -786,13 +787,13 @@ export default function App(){
               </div>
             </div>
             {[
-              { t: "Quick Links", ls: ["About", "Services", "Countries", "Contact"] },
-              { t: "Services", ls: ["Study Visa", "Work Visa", "Tourist Visa", "Business Visa", "PR"] },
+              { t: "Quick Links", ls: [{ l: "About", id: "about-us" }, { l: "Services", id: "services" }, { l: "Countries", id: "tourist-visa" }, { l: "Contact", id: "contact" }] },
+              { t: "Services", ls: [{ l: "Study Visa", id: "study-abroad" }, { l: "Work Visa", id: "work-visa" }, { l: "Tourist Visa", id: "tourist-visa" }, { l: "Business Visa", id: "business-visa" }, { l: "PR", id: "pr" }] },
             ].map((col) => (
               <div key={col.t}>
                 <div style={{ ...SH, fontWeight: 700, marginBottom: 18, fontSize: 14, color: C.gold, letterSpacing: "1px" }}>{col.t}</div>
-                {col.ls.map((l) => (
-                  <motion.div key={l} whileHover={{ x: 4, color: C.gold }} style={{ color: "#64748B", fontSize: 14, marginBottom: 10, cursor: "pointer", transition: "color .2s" }}>{l}</motion.div>
+                {col.ls.map((item) => (
+                  <motion.div key={item.l} onClick={() => go(item.id)} whileHover={{ x: 4, color: C.gold }} style={{ color: "#64748B", fontSize: 14, marginBottom: 10, cursor: "pointer", transition: "color .2s" }}>{item.l}</motion.div>
                 ))}
               </div>
             ))}
@@ -802,7 +803,7 @@ export default function App(){
                 { i: "📍", v: "Office Address, Gujarat, India" },
                 { i: "📞", v: "+91 81600 50554" },
                 { i: "📧", v: "info@visabuddies.in" },
-                { i: "🌐", v: "www.visabuddies.in" },
+                { i: "🌐", v: "www.visa-buddies.com" },
               ].map((it) => (
                 <div key={it.v} style={{ display: "flex", gap: 10, marginBottom: 12, alignItems: "flex-start" }}>
                   <span style={{ fontSize: 14, flexShrink: 0, marginTop: 1 }}>{it.i}</span>
