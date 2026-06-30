@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { motion, useInView, useScroll, useTransform, AnimatePresence, useMotionValue, useAnimationFrame, wrap } from "framer-motion";
 import { LOGO } from "./logoData.js";
+import heroBg from "./assets/hero-bg.jpg";
 
 // ── Brand Colors (from brief) ──────────────────────────────────
 const C = {
@@ -303,6 +304,8 @@ export default function App(){
 
       {/* ── HERO ── */}
       <section id="home" style={{ position: "relative", minHeight: "100vh", display: "flex", alignItems: "center", background: `linear-gradient(160deg,${C.navy} 0%,#0D1F45 60%,#1A0A3C 100%)`, overflow: "hidden", paddingTop: 72 }}>
+        <div style={{ position: "absolute", inset: 0, backgroundImage: `url(${heroBg})`, backgroundSize: "cover", backgroundPosition: "center", opacity: 0.55 }} />
+        <div style={{ position: "absolute", inset: 0, background: `linear-gradient(160deg,${C.navy}E6 0%,#0D1F45CC 60%,#1A0A3CE6 100%)` }} />
         <Stars count={40} />
         <div style={{ position: "absolute", inset: 0, backgroundImage: `linear-gradient(${C.gold}06 1px,transparent 1px),linear-gradient(90deg,${C.gold}06 1px,transparent 1px)`, backgroundSize: "60px 60px", pointerEvents: "none" }} />
         <div style={{ position: "absolute", inset: 0, background: "radial-gradient(ellipse at 30% 50%,rgba(200,155,60,0.08) 0%,transparent 60%)", pointerEvents: "none" }} />
