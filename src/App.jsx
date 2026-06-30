@@ -172,6 +172,9 @@ const DESTINATIONS = [
   { f: "🇸🇬", n: "Singapore", sub: "Business • Finance • Tech" },
 ];
 const TIMELINE = ["Free Consultation", "Profile Evaluation", "Document Preparation", "Application Submission", "Visa Filing", "Interview Guidance", "Visa Approval", "Fly Abroad 🎉"];
+const COUNTRY_LIST = ["USA", "Canada", "UK", "Europe", "Germany", "Hungary", "Poland", "Australia", "New Zealand"];
+const VISA_TYPES = [{ v: "pr", l: "PR Visa" }, { v: "student", l: "Student Visa" }, { v: "work", l: "Work Permit" }, { v: "tourist", l: "Tourist Visa" }, { v: "other", l: "Other Visa" }];
+
 const TESTIMONIALS = [
   { name: "Rahul Sharma", visa: "Canada Student Visa", av: "RS", text: "The entire process was smooth. VISA BUDDIES handled everything professionally." },
   { name: "Priya Patel", visa: "New Zealand Work Visa", av: "PP", text: "They explained every step clearly and were always available to answer questions." },
@@ -222,7 +225,7 @@ export default function App(){
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [backTop, setBackTop] = useState(false);
-  const [form, setForm] = useState({ name: "", phone: "", email: "", country: "", visa: "", msg: "" });
+  const [form, setForm] = useState({ name: "", phone: "", email: "", country: "", visa: "", msg: "", consultType: "call", date: "", time: "", countries: [] });
   const [sent, setSent] = useState(false);
   const [storyIdx, setStoryIdx] = useState(0);
   const { scrollYProgress } = useScroll();
@@ -593,7 +596,7 @@ export default function App(){
         <div style={{ maxWidth: 700, margin: "0 auto", position: "relative", zIndex: 1 }}>
           <Reveal style={{ textAlign: "center", marginBottom: 44 }}>
             <Label>Get Started</Label>
-            <h2 style={{ ...SH, fontSize: 38, fontWeight: 900, color: C.navy, marginBottom: 12 }}>Free Eligibility Assessment</h2>
+            <h2 style={{ ...SH, fontSize: 38, fontWeight: 900, color: C.navy, marginBottom: 12 }}>Book Free Consultation</h2>
             <p style={{ ...SUB, color: C.slate, fontSize: 15, fontStyle: "italic" }}>Fill in your details and our experts will contact you within 24 hours.</p>
           </Reveal>
           <Reveal delay={0.1}>
@@ -615,23 +618,68 @@ export default function App(){
                           onFocus={(e) => (e.target.style.borderColor = C.gold)} onBlur={(e) => (e.target.style.borderColor = C.border)} />
                       ))}
                     </div>
-                    <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16, marginBottom: 16 }} className="g2">
-                      {[{ ph: "Email Address *", k: "email", t: "email" }, { ph: "Destination Country", k: "country", t: "text" }].map((f) => (
-                        <input key={f.k} placeholder={f.ph} type={f.t} value={form[f.k]} onChange={(e) => setForm({ ...form, [f.k]: e.target.value })}
-                          style={{ padding: "13px 16px", border: `1.5px solid ${C.border}`, borderRadius: 10, fontSize: 15, outline: "none", fontFamily: "Poppins,sans-serif", width: "100%" }}
-                          onFocus={(e) => (e.target.style.borderColor = C.gold)} onBlur={(e) => (e.target.style.borderColor = C.border)} />
-                      ))}
+                    <input placeholder="Email Address *" type="email" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })}
+                      style={{ padding: "13px 16px", border: `1.5px solid ${C.border}`, borderRadius: 10, fontSize: 15, outline: "none", fontFamily: "Poppins,sans-serif", width: "100%", marginBottom: 16 }}
+                      onFocus={(e) => (e.target.style.borderColor = C.gold)} onBlur={(e) => (e.target.style.borderColor = C.border)} />
+
+                    <div style={{ marginBottom: 18 }}>
+                      <div style={{ fontSize: 13, fontWeight: 700, color: C.navy, marginBottom: 10 }}>Consultation Type</div>
+                      <div style={{ display: "flex", gap: 20 }}>
+                        {[{ v: "call", l: "📞 Schedule a Call" }, { v: "visit", l: "📍 Schedule a Visit" }].map((o) => (
+                          <label key={o.v} style={{ display: "flex", alignItems: "center", gap: 8, cursor: "pointer", fontSize: 14, color: C.text }}>
+                            <input type="radio" name="consultType" checked={form.consultType === o.v} onChange={() => setForm({ ...form, consultType: o.v })} style={{ accentColor: C.gold, width: 16, height: 16 }} />
+                            {o.l}
+                          </label>
+                        ))}
+                      </div>
                     </div>
-                    <select value={form.visa} onChange={(e) => setForm({ ...form, visa: e.target.value })}
-                      style={{ width: "100%", padding: "13px 16px", border: `1.5px solid ${C.border}`, borderRadius: 10, fontSize: 15, outline: "none", fontFamily: "Poppins,sans-serif", marginBottom: 16, color: form.visa ? C.text : "#94A3B8", background: "white" }}>
-                      <option value="">Select Visa Type</option>
-                      {SERVICES.map((s) => <option key={s.title}>{s.title}</option>)}
-                    </select>
+
+                    <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16, marginBottom: 18 }} className="g2">
+                      <div>
+                        <div style={{ fontSize: 13, fontWeight: 700, color: C.navy, marginBottom: 8 }}>Consultation Date</div>
+                        <input type="date" value={form.date} onChange={(e) => setForm({ ...form, date: e.target.value })}
+                          style={{ padding: "13px 16px", border: `1.5px solid ${C.border}`, borderRadius: 10, fontSize: 14, outline: "none", fontFamily: "Poppins,sans-serif", width: "100%", color: C.text }}
+                          onFocus={(e) => (e.target.style.borderColor = C.gold)} onBlur={(e) => (e.target.style.borderColor = C.border)} />
+                      </div>
+                      <div>
+                        <div style={{ fontSize: 13, fontWeight: 700, color: C.navy, marginBottom: 8 }}>Consultation Time</div>
+                        <select value={form.time} onChange={(e) => setForm({ ...form, time: e.target.value })}
+                          style={{ padding: "13px 16px", border: `1.5px solid ${C.border}`, borderRadius: 10, fontSize: 14, outline: "none", fontFamily: "Poppins,sans-serif", width: "100%", color: form.time ? C.text : "#94A3B8", background: "white" }}>
+                          <option value="">Select time slot</option>
+                          {["10:00 AM - 11:00 AM", "11:00 AM - 12:00 PM", "2:00 PM - 3:00 PM", "3:00 PM - 4:00 PM", "4:00 PM - 5:00 PM"].map((t) => <option key={t}>{t}</option>)}
+                        </select>
+                      </div>
+                    </div>
+
+                    <div style={{ marginBottom: 18 }}>
+                      <div style={{ fontSize: 13, fontWeight: 700, color: C.navy, marginBottom: 10 }}>Visa Type</div>
+                      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }} className="g2">
+                        {VISA_TYPES.map((o) => (
+                          <label key={o.v} style={{ display: "flex", alignItems: "center", gap: 8, cursor: "pointer", fontSize: 14, color: C.text }}>
+                            <input type="radio" name="visaType" checked={form.visa === o.v} onChange={() => setForm({ ...form, visa: o.v })} style={{ accentColor: C.gold, width: 16, height: 16 }} />
+                            {o.l}
+                          </label>
+                        ))}
+                      </div>
+                    </div>
+
+                    <div style={{ marginBottom: 20 }}>
+                      <div style={{ fontSize: 13, fontWeight: 700, color: C.navy, marginBottom: 10 }}>Interested Countries</div>
+                      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }} className="g2">
+                        {COUNTRY_LIST.map((c) => (
+                          <label key={c} style={{ display: "flex", alignItems: "center", gap: 8, cursor: "pointer", fontSize: 14, color: C.text }}>
+                            <input type="checkbox" checked={form.countries.includes(c)} onChange={() => setForm({ ...form, countries: form.countries.includes(c) ? form.countries.filter((x) => x !== c) : [...form.countries, c] })} style={{ accentColor: C.gold, width: 16, height: 16 }} />
+                            {c}
+                          </label>
+                        ))}
+                      </div>
+                    </div>
+
                     <textarea placeholder="Tell us about your situation (optional)" rows={3} value={form.msg} onChange={(e) => setForm({ ...form, msg: e.target.value })}
                       style={{ width: "100%", padding: "13px 16px", border: `1.5px solid ${C.border}`, borderRadius: 10, fontSize: 15, outline: "none", fontFamily: "Poppins,sans-serif", resize: "vertical", marginBottom: 20 }}
                       onFocus={(e) => (e.target.style.borderColor = C.gold)} onBlur={(e) => (e.target.style.borderColor = C.border)} />
                     <GoldBtn style={{ width: "100%", padding: 16, fontSize: 16, borderRadius: 12 }} onClick={() => { if (form.name && form.email && form.phone) setSent(true); }}>
-                      ✦ Get My Free Assessment
+                      ✦ Book Free Consultation
                     </GoldBtn>
                     <p style={{ fontSize: 12, color: "#94A3B8", textAlign: "center", marginTop: 14 }}>No spam. No hidden charges. 100% free assessment.</p>
                   </motion.div>
