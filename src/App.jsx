@@ -115,6 +115,17 @@ function Stars({ count = 30 }) {
 }
 
 // ── Gold Shimmer Button ────────────────────────────────────────
+const PHONE_NUMBER = "+918160050554";
+const WA_NUMBER = "918160050554";
+const WA_MSG = "Hi Visa Buddies! I'm interested in visa consultation services. Could you please share more details?";
+const WA_LINK = `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(WA_MSG)}`;
+
+function WhatsAppIcon({ size = 18 }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 32 32" fill="currentColor"><path d="M16.001 3C9.097 3 3.5 8.597 3.5 15.5c0 2.42.687 4.682 1.878 6.604L3 29l7.073-2.34A12.43 12.43 0 0 0 16 28.5c6.904 0 12.5-5.597 12.5-12.5S22.905 3 16.001 3zm0 22.7c-2.05 0-3.974-.575-5.609-1.572l-.402-.24-4.198 1.39 1.41-4.092-.262-.42A10.18 10.18 0 0 1 5.3 15.5c0-5.91 4.79-10.7 10.7-10.7s10.7 4.79 10.7 10.7-4.79 10.7-10.7 10.7zm5.86-7.99c-.32-.16-1.9-.94-2.196-1.045-.295-.108-.51-.16-.724.16-.214.32-.83 1.045-1.018 1.26-.187.213-.374.24-.694.08-.32-.16-1.352-.498-2.575-1.587-.952-.85-1.595-1.9-1.782-2.22-.187-.32-.02-.493.14-.652.144-.144.32-.374.48-.56.16-.187.213-.32.32-.534.107-.214.053-.4-.027-.56-.08-.16-.724-1.745-.992-2.39-.262-.628-.528-.543-.724-.553l-.617-.011c-.214 0-.56.08-.853.4-.293.32-1.118 1.092-1.118 2.664s1.145 3.09 1.305 3.303c.16.213 2.254 3.44 5.46 4.825.763.33 1.358.527 1.822.674.766.244 1.463.21 2.014.127.614-.092 1.9-.776 2.168-1.526.267-.75.267-1.39.187-1.526-.08-.135-.293-.213-.613-.373z"/></svg>
+  );
+}
+
 function GoldBtn({ children, onClick, style = {}, outline = false }) {
   return (
     <motion.button whileHover={{ scale: 1.05, boxShadow: `0 8px 30px ${C.gold}66` }} whileTap={{ scale: 0.96 }}
@@ -335,11 +346,11 @@ export default function App(){
               <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.38 }}
                 style={{ display: "flex", gap: 14, flexWrap: "wrap", marginBottom: 44 }}>
                 <GoldBtn onClick={() => go("assessment")} style={{ fontSize: 15, padding: "14px 28px" }}>✦ Book Free Consultation</GoldBtn>
-                <motion.a href="https://wa.me/91XXXXXXXXXX" target="_blank" rel="noopener noreferrer" whileHover={{ scale: 1.04 }} whileTap={{ scale: 0.97 }}
+                <motion.a href={WA_LINK} target="_blank" rel="noopener noreferrer" whileHover={{ scale: 1.04 }} whileTap={{ scale: 0.97 }}
                   style={{ display: "flex", alignItems: "center", gap: 8, padding: "14px 24px", borderRadius: 12, background: "#25D366", color: "white", fontWeight: 700, fontSize: 15, textDecoration: "none", fontFamily: "Poppins,sans-serif" }}>
-                  💬 Chat on WhatsApp
+                  <WhatsAppIcon /> Chat on WhatsApp
                 </motion.a>
-                <motion.a href="tel:+91XXXXXXXXXX" whileHover={{ scale: 1.04 }} whileTap={{ scale: 0.97 }}
+                <motion.a href={`tel:${PHONE_NUMBER}`} whileHover={{ scale: 1.04 }} whileTap={{ scale: 0.97 }}
                   style={{ display: "flex", alignItems: "center", gap: 8, padding: "14px 24px", borderRadius: 12, border: `1.5px solid ${C.gold}55`, color: C.goldL, fontWeight: 700, fontSize: 15, textDecoration: "none", fontFamily: "Poppins,sans-serif" }}>
                   📞 Call Expert
                 </motion.a>
@@ -573,6 +584,32 @@ export default function App(){
         </div>
       </section>
 
+      {/* ── VISA CATEGORIES ── */}
+      <section style={{ padding: "100px 24px", background: C.white }}>
+        <div style={{ maxWidth: 1100, margin: "0 auto" }}>
+          <Reveal style={{ textAlign: "center", marginBottom: 52 }}>
+            <Label>Our Specializations</Label>
+            <h2 style={{ ...SH, fontSize: 38, fontWeight: 900, color: C.navy, marginBottom: 12 }}>Visa Categories We Handle</h2>
+          </Reveal>
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 28 }} className="g3">
+            {[
+              { id: "study-abroad", icon: "🎓", title: "Study Abroad", desc: "From shortlisting universities to securing your student visa, we guide you through every step — SOPs, LORs, financial documentation, and interview prep — for top study destinations including Canada, UK, Australia, and Europe." },
+              { id: "business-visa", icon: "🏢", title: "Business Visa", desc: "Whether you're attending a conference, exploring investment opportunities, or visiting business partners abroad, our team handles documentation and applications for business and investor visas across major economies." },
+              { id: "pr", icon: "🛂", title: "Permanent Residency (PR)", desc: "Settle abroad for good. We help you navigate points-based and employer-sponsored PR pathways for Canada, Australia, New Zealand, and the UK — from eligibility assessment to final approval." },
+            ].map((c, i) => (
+              <Reveal key={c.id} delay={i * 0.08}>
+                <div id={c.id} style={{ background: C.silver, borderRadius: 18, padding: 30, border: `1px solid ${C.border}`, height: "100%", scrollMarginTop: 90 }}>
+                  <div style={{ fontSize: 38, marginBottom: 14 }}>{c.icon}</div>
+                  <h3 style={{ ...SH, fontSize: 18, fontWeight: 800, color: C.navy, marginBottom: 10 }}>{c.title}</h3>
+                  <p style={{ fontSize: 13.5, color: C.slate, lineHeight: 1.7, marginBottom: 18 }}>{c.desc}</p>
+                  <GoldBtn outline onClick={() => go("assessment")} style={{ fontSize: 13, padding: "9px 18px" }}>Get Started</GoldBtn>
+                </div>
+              </Reveal>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* ── FOUNDERS ── */}
       <section style={{ padding: "100px 24px", background: C.silver }}>
         <div style={{ maxWidth: 900, margin: "0 auto" }}>
@@ -763,7 +800,7 @@ export default function App(){
               <div style={{ ...SH, fontWeight: 700, marginBottom: 18, fontSize: 14, color: C.gold, letterSpacing: "1px" }}>Contact</div>
               {[
                 { i: "📍", v: "Office Address, Gujarat, India" },
-                { i: "📞", v: "+91 XXXXX XXXXX" },
+                { i: "📞", v: "+91 81600 50554" },
                 { i: "📧", v: "info@visabuddies.in" },
                 { i: "🌐", v: "www.visabuddies.in" },
               ].map((it) => (
@@ -784,11 +821,11 @@ export default function App(){
       </footer>
 
       {/* ── WhatsApp Float ── */}
-      <motion.a href="https://wa.me/91XXXXXXXXXX" target="_blank" rel="noopener noreferrer"
+      <motion.a href={WA_LINK} target="_blank" rel="noopener noreferrer"
         initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ delay: 1.5, type: "spring", stiffness: 260, damping: 20 }}
         whileHover={{ scale: 1.15 }} whileTap={{ scale: 0.9 }}
-        style={{ position: "fixed", bottom: 24, right: 24, zIndex: 999, width: 56, height: 56, borderRadius: "50%", background: "#25D366", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 28, boxShadow: "0 4px 20px rgba(37,211,102,0.5)", textDecoration: "none" }}>
-        💬
+        style={{ position: "fixed", bottom: 24, right: 24, zIndex: 999, width: 56, height: 56, borderRadius: "50%", background: "#25D366", display: "flex", alignItems: "center", justifyContent: "center", color: "white", boxShadow: "0 4px 20px rgba(37,211,102,0.5)", textDecoration: "none" }}>
+        <WhatsAppIcon size={28} />
       </motion.a>
 
       {/* ── Back to Top ── */}
