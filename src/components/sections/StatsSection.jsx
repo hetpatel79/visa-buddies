@@ -1,13 +1,12 @@
 import { motion } from "framer-motion";
-import C from "../../constants/colors";
-import { STATS } from "../../constants/data";
-import { fadeUp, containerV } from "../../utils/animations";
-import Stars from "../common/Stars";
-import Counter from "../common/Counter";
-import Reveal from "../ui/Reveal";
-import Label from "../ui/Label";
+import C from "@/constants/colors";
+import { SH } from "@/constants/typography";
+import { STATS } from "@/constants";
+import { fadeUp, containerV } from "@/utils";
+import { Stars, Counter } from "@/components/common";
+import { Reveal, Label } from "@/components/ui";
 
-export default function StatsSection({ SH }) {
+export default function StatsSection() {
   return (
     <section style={{ padding: "80px 24px", background: C.navy, position: "relative", overflow: "hidden" }}>
       <Stars count={20} />
@@ -17,12 +16,11 @@ export default function StatsSection({ SH }) {
           <Label>Our Numbers</Label>
           <h2 style={{ ...SH, fontSize: 38, fontWeight: 900, color: C.white }}>Our Numbers Speak</h2>
         </Reveal>
-
         <motion.div variants={containerV} initial="hidden" whileInView="show" viewport={{ once: true }}
           style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: 32 }} className="g4">
           {STATS.map((s, i) => (
             <motion.div key={s.l} variants={fadeUp(i * 0.08)} whileHover={{ scale: 1.06 }}
-              style={{ textAlign: "center", padding: "28px 16px", borderRadius: 20, background: "rgba(255,255,255,0.04)", border: `1px solid ${C.gold}22`, cursor: "default" }}>
+              style={{ textAlign: "center", padding: "28px 16px", borderRadius: 20, background: "rgba(255,255,255,0.04)", border: `1px solid ${C.gold}22` }}>
               <div style={{ ...SH, fontSize: 46, fontWeight: 900, color: C.gold, textShadow: `0 0 30px ${C.gold}55`, marginBottom: 8 }}>
                 <Counter target={s.n} suffix={s.s} />
               </div>

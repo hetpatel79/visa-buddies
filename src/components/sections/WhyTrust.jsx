@@ -1,12 +1,12 @@
 import { motion } from "framer-motion";
-import LOGO from "../../assets/logo.jpg";
-import C from "../../constants/colors";
-import { TRUST_POINTS } from "../../constants/data";
-import Stars from "../common/Stars";
-import Reveal from "../ui/Reveal";
-import Label from "../ui/Label";
+import LOGO from "@/assets/logo.jpg";
+import C from "@/constants/colors";
+import { SH } from "@/constants/typography";
+import { TRUST_POINTS } from "@/constants";
+import { Stars } from "@/components/common";
+import { Reveal, Label } from "@/components/ui";
 
-export default function WhyTrust({ SH }) {
+export default function WhyTrust() {
   return (
     <section style={{ padding: "100px 24px", background: C.navy, position: "relative", overflow: "hidden" }}>
       <Stars count={25} />
@@ -14,14 +14,10 @@ export default function WhyTrust({ SH }) {
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 64, alignItems: "center" }} className="g2">
           <Reveal>
             <Label>Why Choose Us</Label>
-            <h2 style={{ ...SH, fontSize: 36, fontWeight: 900, color: C.white, marginBottom: 24, lineHeight: 1.2 }}>
-              Why Clients Trust VISA BUDDIES
-            </h2>
+            <h2 style={{ ...SH, fontSize: 36, fontWeight: 900, color: C.white, marginBottom: 24, lineHeight: 1.2 }}>Why Clients Trust VISA BUDDIES</h2>
             <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
               {TRUST_POINTS.map((item, i) => (
-                <motion.div key={item}
-                  initial={{ opacity: 0, x: -20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }}
-                  transition={{ delay: i * 0.06, duration: 0.4 }}
+                <motion.div key={item} initial={{ opacity: 0, x: -20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.06 }}
                   whileHover={{ x: 6 }}
                   style={{ display: "flex", alignItems: "center", gap: 12, padding: "12px 18px", background: "rgba(255,255,255,0.04)", borderRadius: 10, border: `1px solid ${C.gold}18` }}>
                   <motion.span animate={{ scale: [1, 1.2, 1] }} transition={{ duration: 2, repeat: Infinity, delay: i * 0.2 }} style={{ color: C.gold, fontSize: 18 }}>✔</motion.span>
@@ -30,7 +26,6 @@ export default function WhyTrust({ SH }) {
               ))}
             </div>
           </Reveal>
-
           <Reveal delay={0.1}>
             <div style={{ background: "rgba(255,255,255,0.04)", borderRadius: 24, padding: 36, border: `1px solid ${C.gold}22`, textAlign: "center" }}>
               <motion.div animate={{ y: [0, -10, 0] }} transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
@@ -39,7 +34,7 @@ export default function WhyTrust({ SH }) {
               </motion.div>
               <div style={{ ...SH, color: C.gold, fontSize: 13, letterSpacing: "2px", marginTop: 16 }}>YOUR DREAM. OUR PLAN.</div>
               <div style={{ ...SH, color: C.goldL, fontSize: 11, letterSpacing: "2px", marginTop: 4 }}>BETTER FUTURE.</div>
-              <div style={{ marginTop: 24, padding: "14px", background: `${C.gold}15`, borderRadius: 12, border: `1px solid ${C.gold}30` }}>
+              <div style={{ marginTop: 24, padding: 14, background: `${C.gold}15`, borderRadius: 12, border: `1px solid ${C.gold}30` }}>
                 <div style={{ color: C.gold, fontWeight: 700, fontSize: 13 }}>Global Mobility Experts</div>
                 <div style={{ color: "#94A3B8", fontSize: 12, marginTop: 4 }}>Expert Guidance • Transparent Process</div>
               </div>

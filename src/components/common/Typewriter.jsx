@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import C from "../../constants/colors";
+import C from "@/constants/colors";
 
 export default function Typewriter({ words, speed = 80, pause = 2000 }) {
   const [wi,  setWi]  = useState(0);
@@ -28,13 +28,7 @@ export default function Typewriter({ words, speed = 80, pause = 2000 }) {
   return (
     <span>
       {txt}
-      <motion.span
-        animate={{ opacity: [1, 0, 1] }}
-        transition={{ duration: 0.7, repeat: Infinity }}
-        style={{ color: C.gold }}
-      >
-        |
-      </motion.span>
+      <motion.span animate={{ opacity: [1, 0, 1] }} transition={{ duration: 0.7, repeat: Infinity }} style={{ color: C.gold }}>|</motion.span>
     </span>
   );
 }

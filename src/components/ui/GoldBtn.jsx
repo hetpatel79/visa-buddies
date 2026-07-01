@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import C from "../../constants/colors";
+import C from "@/constants/colors";
 
 export default function GoldBtn({ children, onClick, style = {}, outline = false, disabled = false }) {
   return (
@@ -18,7 +18,7 @@ export default function GoldBtn({ children, onClick, style = {}, outline = false
         fontSize:       15,
         fontWeight:     700,
         cursor:         disabled ? "not-allowed" : "pointer",
-        fontFamily:     "Poppins,sans-serif",
+        fontFamily:     "Poppins, sans-serif",
         opacity:        disabled ? 0.6 : 1,
         ...style,
       }}

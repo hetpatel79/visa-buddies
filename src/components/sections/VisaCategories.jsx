@@ -1,10 +1,9 @@
-import C from "../../constants/colors";
-import { VISA_CATEGORIES } from "../../constants/data";
-import Reveal from "../ui/Reveal";
-import Label from "../ui/Label";
-import GoldBtn from "../ui/GoldBtn";
+import C from "@/constants/colors";
+import { SH } from "@/constants/typography";
+import { VISA_CATEGORIES } from "@/constants";
+import { Reveal, Label, GoldBtn } from "@/components/ui";
 
-export default function VisaCategories({ go, setForm, SH }) {
+export default function VisaCategories({ go, setForm }) {
   return (
     <section id="services" style={{ padding: "100px 24px", background: C.white }}>
       <div style={{ maxWidth: 1100, margin: "0 auto" }}>
@@ -12,7 +11,6 @@ export default function VisaCategories({ go, setForm, SH }) {
           <Label>Our Specializations</Label>
           <h2 style={{ ...SH, fontSize: 38, fontWeight: 900, color: C.navy, marginBottom: 12 }}>Visa Categories We Handle</h2>
         </Reveal>
-
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr 1fr", gap: 24 }} className="g4">
           {VISA_CATEGORIES.map((c, i) => (
             <Reveal key={c.key} delay={i * 0.08}>

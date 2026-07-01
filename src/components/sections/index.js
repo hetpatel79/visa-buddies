@@ -1,0 +1,13 @@
+export { default as Navbar }             from "./Navbar.jsx";
+export { default as Hero }               from "./Hero.jsx";
+export { default as TestimonialsSection }from "./TestimonialsSection.jsx";
+export { default as ConsultationForm }   from "./ConsultationForm.jsx";
+export { default as WhyVisaBuddies }     from "./WhyVisaBuddies.jsx";
+export { default as VisaCategories }     from "./VisaCategories.jsx";
+export { default as FoundersSection }    from "./FoundersSection.jsx";
+export { default as StatsSection }       from "./StatsSection.jsx";
+export { default as DestinationsSection }from "./DestinationsSection.jsx";
+export { default as ProcessTimeline }    from "./ProcessTimeline.jsx";
+export { default as WhyTrust }           from "./WhyTrust.jsx";
+export { default as FAQSection }         from "./FAQSection.jsx";
+export { default as Footer }             from "./Footer.jsx";

@@ -1,6 +1,6 @@
 import { useRef } from "react";
 import { motion, useInView } from "framer-motion";
-import { fadeUp } from "../../utils/animations";
+import { fadeUp } from "@/utils";
 
 export default function Reveal({ children, delay = 0, style = {} }) {
   const ref    = useRef(null);

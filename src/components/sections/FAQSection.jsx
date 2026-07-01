@@ -1,10 +1,10 @@
-import C from "../../constants/colors";
-import { FAQS } from "../../constants/data";
-import Accordion from "../common/Accordion";
-import Reveal from "../ui/Reveal";
-import Label from "../ui/Label";
+import C from "@/constants/colors";
+import { SH } from "@/constants/typography";
+import { FAQS } from "@/constants";
+import { Accordion } from "@/components/common";
+import { Reveal, Label } from "@/components/ui";
 
-export default function FAQSection({ SH }) {
+export default function FAQSection() {
   return (
     <section style={{ padding: "100px 24px", background: C.white }}>
       <div style={{ maxWidth: 800, margin: "0 auto" }}>
