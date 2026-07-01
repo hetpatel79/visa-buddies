@@ -6,7 +6,7 @@ import { todayStr, isSundayStr, isPastDateStr, getAvailableSlots } from "@/utils
 import { Stars } from "@/components/common";
 import { Reveal, Label, GoldBtn } from "@/components/ui";
 
-export default function ConsultationForm({ form, setForm, sent, errors, setErrors, submitting, resetForm, handleSubmit }) {
+export default function ConsultationForm({ form, setForm, sent, errors, setErrors, submitting, submitError, resetForm, handleSubmit }) {
   const inp = (extra = {}) => ({
     padding: "13px 16px", borderRadius: 10, fontSize: 15, outline: "none",
     fontFamily: "Poppins, sans-serif", width: "100%", ...extra,
@@ -174,6 +174,12 @@ export default function ConsultationForm({ form, setForm, sent, errors, setError
                       onBlur={(e) => (e.target.style.borderColor = C.border)} />
                     <ErrMsg field="countries" />
                   </div>
+
+                  {submitError && (
+                    <div style={{ background: "#FEF2F2", border: "1px solid #FCA5A5", borderRadius: 10, padding: "12px 16px", marginBottom: 12, color: "#DC2626", fontSize: 14 }}>
+                      ⚠️ {submitError}
+                    </div>
+                  )}
 
                   <GoldBtn disabled={submitting} style={{ width: "100%", padding: 16, fontSize: 16, borderRadius: 12, marginTop: 4 }} onClick={handleSubmit}>
                     {submitting ? "Sending..." : "✦ Book Free Consultation"}

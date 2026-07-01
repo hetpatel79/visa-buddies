@@ -6,7 +6,8 @@ export function useFormState() {
   const [sent,       setSent]       = useState(false);
   const [errors,     setErrors]     = useState({});
   const [submitting, setSubmitting] = useState(false);
-  const lastSubmitRef               = useRef(0);
+  const [submitError, setSubmitError] = useState(null);
+  const lastSubmitRef = useRef(0);
 
   const clearField = (key) =>
     setErrors((prev) => ({ ...prev, [key]: undefined }));
@@ -15,12 +16,14 @@ export function useFormState() {
     setSent(false);
     setForm(EMPTY_FORM);
     setErrors({});
+    setSubmitError(null);
   };
 
-  const handleSubmit = () => {
-    // Honeypot — silently fake success so bots don't retry
+  const handleSubmit = async () => {
+    // Honeypot — silently fake success
     if (form.company) { setSent(true); return; }
 
+    // Frontend rate limit / duplicate-click guard
     const now = Date.now();
     if (submitting || now - lastSubmitRef.current < 3000) return;
 
@@ -30,9 +33,28 @@ export function useFormState() {
 
     lastSubmitRef.current = now;
     setSubmitting(true);
+    setSubmitError(null);
 
-    // TODO: replace timeout with Resend call once connected
-    setTimeout(() => { setSubmitting(false); setSent(true); }, 1200);
+    try {
+      const res = await fetch("/.netlify/functions/send-email", {
+        method:  "POST",
+        headers: { "Content-Type": "application/json" },
+        body:    JSON.stringify(form),
+      });
+
+      const json = await res.json();
+
+      if (!res.ok || !json.ok) {
+        setSubmitError(json.error || "Something went wrong. Please try again.");
+        return;
+      }
+
+      setSent(true);
+    } catch {
+      setSubmitError("Network error. Please check your connection and try again.");
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return {
@@ -40,6 +62,7 @@ export function useFormState() {
     sent, setSent,
     errors, setErrors, clearField,
     submitting,
+    submitError,
     resetForm, handleSubmit,
   };
 }

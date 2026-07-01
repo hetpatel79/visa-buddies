@@ -55,7 +55,7 @@ export default function App() {
   const [menuOpen, setMenuOpen] = useState(false);
   const { scrolled, backTop, heroY, heroOp, scrollYProgress } = useScrollBehavior();
   const storyIdx = useTestimonialCycle(4000);
-  const { form, setForm, sent, setSent, errors, setErrors, submitting, resetForm, handleSubmit } = useFormState();
+  const { form, setForm, sent, setSent, errors, setErrors, submitting, submitError, resetForm, handleSubmit } = useFormState();
 
   const go    = (id) => { document.getElementById(id)?.scrollIntoView({ behavior: "smooth" }); setMenuOpen(false); };
   const goTop = ()   => window.scrollTo({ top: 0, behavior: "smooth" });
@@ -82,6 +82,7 @@ export default function App() {
         sent={sent} setSent={setSent}
         errors={errors} setErrors={setErrors}
         submitting={submitting}
+        submitError={submitError}
         resetForm={resetForm}
         handleSubmit={handleSubmit}
       />
