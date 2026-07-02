@@ -14,7 +14,11 @@ const CORS = {
   "Access-Control-Allow-Headers": "Content-Type",
 };
 
-// ── helpers ───────────────────────────────────────────────────────
+// ── Testing mode ─────────────────────────────────────────────────
+// Resend free plan only delivers to the account's verified email.
+// Set RESEND_TEST_EMAIL in Netlify env to override all recipients
+// during testing. Remove once domain is verified.
+const TEST_EMAIL = process.env.RESEND_TEST_EMAIL || null;
 function respond(statusCode, body) {
   return { statusCode, headers: { ...CORS, "Content-Type": "application/json" }, body: JSON.stringify(body) };
 }
@@ -168,7 +172,7 @@ export async function handler(event) {
         headers: { "Content-Type": "application/json", Authorization: `Bearer ${apiKey}` },
         body: JSON.stringify({
           from:    "Visa Buddies <onboarding@resend.dev>",
-          to:      ["hetpatel2130@gmail.com"],
+          to:      [TEST_EMAIL || "hetpatel2130@gmail.com"],
           subject: `📋 New Consultation — ${data.name} (${data.visa})`,
           html:    buildStaffEmail(data),
         }),
@@ -179,7 +183,7 @@ export async function handler(event) {
         headers: { "Content-Type": "application/json", Authorization: `Bearer ${apiKey}` },
         body: JSON.stringify({
           from:    "Visa Buddies <onboarding@resend.dev>",
-          to:      [data.email],
+          to:      [TEST_EMAIL || data.email],
           subject: "✅ Your Visa Consultation is Confirmed — Visa Buddies",
           html:    buildClientEmail(data),
         }),
