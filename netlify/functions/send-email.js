@@ -167,8 +167,8 @@ export async function handler(event) {
         method: "POST",
         headers: { "Content-Type": "application/json", Authorization: `Bearer ${apiKey}` },
         body: JSON.stringify({
-          from:    "Visa Buddies Bookings <bookings@visabuddies.in>",
-          to:      ["info@visabuddies.in"],
+          from:    "Visa Buddies <onboarding@resend.dev>",
+          to:      ["hetpatel2130@gmail.com"],
           subject: `📋 New Consultation — ${data.name} (${data.visa})`,
           html:    buildStaffEmail(data),
         }),
@@ -178,7 +178,7 @@ export async function handler(event) {
         method: "POST",
         headers: { "Content-Type": "application/json", Authorization: `Bearer ${apiKey}` },
         body: JSON.stringify({
-          from:    "Visa Buddies <noreply@visabuddies.in>",
+          from:    "Visa Buddies <onboarding@resend.dev>",
           to:      [data.email],
           subject: "✅ Your Visa Consultation is Confirmed — Visa Buddies",
           html:    buildClientEmail(data),
