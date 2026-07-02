@@ -168,7 +168,7 @@ export async function handler(event) {
     // 1. Staff notification
     await transporter.sendMail({
       from: `"Visa Buddies" <${gmailUser}>`,
-      to:   gmailUser,
+      to:   "hetpatel2130@gmail.com",
       subject: `📋 New Consultation — ${data.name} (${data.visa})`,
       html: buildStaffEmail(data),
     });
@@ -177,7 +177,7 @@ export async function handler(event) {
     transporter.sendMail({
       from:    `"Visa Buddies" <${gmailUser}>`,
       to:      data.email,
-      replyTo: gmailUser,
+      replyTo: "hetpatel2130@gmail.com",
       subject: "✅ Your Visa Consultation is Confirmed — Visa Buddies",
       html:    buildClientEmail(data),
     }).catch((e) => console.warn("Client confirmation failed (non-fatal):", e.message));
