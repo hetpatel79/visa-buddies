@@ -26,9 +26,9 @@ export default function Typewriter({ words, speed = 80, pause = 2000 }) {
   }, [ci, del, wi, words, speed, pause]);
 
   return (
-    <span>
+    <span style={{ display: "inline", whiteSpace: "nowrap" }}>
       {txt}
-      <motion.span animate={{ opacity: [1, 0, 1] }} transition={{ duration: 0.7, repeat: Infinity }} style={{ color: C.gold }}>|</motion.span>
+      <motion.span animate={{ opacity: [1, 0, 1] }} transition={{ duration: 0.7, repeat: Infinity }} style={{ color: C.gold, marginLeft: 1 }}>|</motion.span>
     </span>
   );
 }

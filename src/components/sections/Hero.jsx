@@ -27,9 +27,9 @@ export default function Hero({ go, storyIdx, heroY, heroOp }) {
               </div>
             </motion.div>
             <motion.h1 className="hero-h" initial={{ opacity: 0, y: 48 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
-              style={{ ...SH, fontSize: 70, fontWeight: 900, lineHeight: 1.02, color: C.white, marginBottom: 22 }}>
-              Your Gateway to<br />
-              <span style={{ background: `linear-gradient(135deg,${C.gold},${C.goldL})`, WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>
+              style={{ ...SH, fontSize: 70, fontWeight: 900, lineHeight: 1.1, color: C.white, marginBottom: 22 }}>
+              Your Gateway to{" "}
+              <span style={{ display: "inline-block", minWidth: "10px", background: `linear-gradient(135deg,${C.gold},${C.goldL})`, WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>
                 <Typewriter words={HERO_WORDS} speed={85} pause={2200} />
               </span>
             </motion.h1>
