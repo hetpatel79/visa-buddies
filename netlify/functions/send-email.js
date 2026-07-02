@@ -165,37 +165,36 @@ export async function handler(event) {
   }
 
   try {
-    const [staffRes, clientRes] = await Promise.all([
-      // Email to staff
-      fetch("https://api.resend.com/emails", {
-        method: "POST",
-        headers: { "Content-Type": "application/json", Authorization: `Bearer ${apiKey}` },
-        body: JSON.stringify({
-          from:    "Visa Buddies <onboarding@resend.dev>",
-          to:      [TEST_EMAIL || "hetpatel2130@gmail.com"],
-          subject: `📋 New Consultation — ${data.name} (${data.visa})`,
-          html:    buildStaffEmail(data),
-        }),
+    // Staff notification (required — fail if this doesn't go through)
+    const staffRes = await fetch("https://api.resend.com/emails", {
+      method: "POST",
+      headers: { "Content-Type": "application/json", Authorization: `Bearer ${apiKey}` },
+      body: JSON.stringify({
+        from:    "Visa Buddies <onboarding@resend.dev>",
+        to:      [TEST_EMAIL || "hetpatel2130@gmail.com"],
+        subject: `📋 New Consultation — ${data.name} (${data.visa})`,
+        html:    buildStaffEmail(data),
       }),
-      // Confirmation to client
-      fetch("https://api.resend.com/emails", {
-        method: "POST",
-        headers: { "Content-Type": "application/json", Authorization: `Bearer ${apiKey}` },
-        body: JSON.stringify({
-          from:    "Visa Buddies <onboarding@resend.dev>",
-          to:      [TEST_EMAIL || data.email],
-          subject: "✅ Your Visa Consultation is Confirmed — Visa Buddies",
-          html:    buildClientEmail(data),
-        }),
-      }),
-    ]);
+    });
 
-    if (!staffRes.ok || !clientRes.ok) {
-      const staffErr  = !staffRes.ok  ? await staffRes.text()  : null;
-      const clientErr = !clientRes.ok ? await clientRes.text() : null;
-      console.error("Resend error:", { staffErr, clientErr });
+    if (!staffRes.ok) {
+      const staffErr = await staffRes.text();
+      console.error("Resend staff email error:", staffErr);
       return respond(502, { error: "Failed to send emails. Please try again." });
     }
+
+    // Client confirmation — best-effort, don't fail the whole submission if Resend
+    // blocks it (common on free plan when domain isn't yet verified).
+    fetch("https://api.resend.com/emails", {
+      method: "POST",
+      headers: { "Content-Type": "application/json", Authorization: `Bearer ${apiKey}` },
+      body: JSON.stringify({
+        from:    "Visa Buddies <onboarding@resend.dev>",
+        to:      [TEST_EMAIL || data.email],
+        subject: "✅ Your Visa Consultation is Confirmed — Visa Buddies",
+        html:    buildClientEmail(data),
+      }),
+    }).catch((e) => console.warn("Client confirmation email failed (non-fatal):", e));
 
     return respond(200, { ok: true });
   } catch (err) {
