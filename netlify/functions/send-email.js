@@ -184,7 +184,7 @@ export async function handler(event) {
     // 1. Staff notification
     const staffInfo = await transporter.sendMail({
       from: `"Visa Buddies" <${gmailUser}>`,
-      to:   "hetpatel2130@gmail.com",
+      to:   gmailUser,
       subject: `📋 New Consultation — ${data.name} (${data.visa})`,
       html: buildStaffEmail(data),
     });
@@ -194,7 +194,7 @@ export async function handler(event) {
     transporter.sendMail({
       from:    `"Visa Buddies" <${gmailUser}>`,
       to:      data.email,
-      replyTo: "hetpatel2130@gmail.com",
+      replyTo: gmailUser,
       subject: "✅ Your Visa Consultation is Confirmed — Visa Buddies",
       html:    buildClientEmail(data),
     })
