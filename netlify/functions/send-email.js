@@ -1,46 +1,46 @@
 /**
  * Netlify Function — send-email
- * Endpoint: POST /.netlify/functions/send-email
+ * Uses Gmail SMTP via Nodemailer.
  *
- * Keeps RESEND_API_KEY safely on the server.
- * Frontend never touches the key.
+ * Required env vars (set in Netlify → Site → Environment Variables):
+ *   GMAIL_USER  — your Gmail address e.g. hetpatel2130@gmail.com
+ *   GMAIL_PASS  — Gmail App Password (16 chars, NOT your regular password)
+ *                 Get it: Google Account → Security → 2-Step Verification → App passwords
  */
 
-const ALLOWED_ORIGIN = process.env.ALLOWED_ORIGIN || "https://visa-buddies.netlify.app";
+import nodemailer from "nodemailer";
 
 const CORS = {
-  "Access-Control-Allow-Origin":  ALLOWED_ORIGIN,
+  "Access-Control-Allow-Origin":  "*",
   "Access-Control-Allow-Methods": "POST, OPTIONS",
   "Access-Control-Allow-Headers": "Content-Type",
 };
 
-// ── Testing mode ─────────────────────────────────────────────────
-// Resend free plan only delivers to the account's verified email.
-// Set RESEND_TEST_EMAIL in Netlify env to override all recipients
-// during testing. Remove once domain is verified.
-const TEST_EMAIL = process.env.RESEND_TEST_EMAIL || null;
 function respond(statusCode, body) {
-  return { statusCode, headers: { ...CORS, "Content-Type": "application/json" }, body: JSON.stringify(body) };
+  return {
+    statusCode,
+    headers: { ...CORS, "Content-Type": "application/json" },
+    body: JSON.stringify(body),
+  };
 }
 
 function validatePayload(data) {
-  const NAME_RE  = /^[A-Za-z\s.'-]{3,}$/;
+  const NAME_RE  = /^[A-Za-z\s.'-]{2,}$/;
   const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   const PHONE_RE = /^[6-9]\d{9}$/;
 
-  if (!data.name  || !NAME_RE.test(data.name.trim()))   return "Invalid name.";
-  if (!data.phone || !PHONE_RE.test(data.phone.trim()))  return "Invalid phone number.";
-  if (!data.email || !EMAIL_RE.test(data.email.trim()))  return "Invalid email.";
-  if (!data.consultType)                                  return "Missing consultation type.";
-  if (!data.visa)                                         return "Missing visa type.";
-  if (!data.date)                                         return "Missing date.";
-  if (!data.time)                                         return "Missing time.";
+  if (!data.name  || !NAME_RE.test(data.name.trim()))  return "Invalid name.";
+  if (!data.phone || !PHONE_RE.test(data.phone.trim())) return "Invalid phone number.";
+  if (!data.email || !EMAIL_RE.test(data.email.trim())) return "Invalid email.";
+  if (!data.consultType)                                 return "Missing consultation type.";
+  if (!data.visa)                                        return "Missing visa type.";
+  if (!data.date)                                        return "Missing date.";
+  if (!data.time)                                        return "Missing time.";
   const hasCountry = (data.countries && data.countries.length > 0) || data.otherCountry?.trim();
-  if (!hasCountry)                                        return "Missing country selection.";
+  if (!hasCountry)                                       return "At least one country is required.";
   return null;
 }
 
-// ── email builders ────────────────────────────────────────────────
 function buildStaffEmail(d) {
   const countries = [...(d.countries || []), d.otherCountry].filter(Boolean).join(", ");
   return `
@@ -78,7 +78,7 @@ function buildStaffEmail(d) {
         <tr><td>Countries</td><td>${countries}</td></tr>
       </table>
     </div>
-    <div class="ftr">Visa Buddies • Gujarat, India • info@visabuddies.in</div>
+    <div class="ftr">Visa Buddies • Gujarat, India • www.visa-buddies.com</div>
   </div>
 </body>
 </html>`;
@@ -122,83 +122,69 @@ function buildClientEmail(d) {
       </div>
       <p>In the meantime, feel free to WhatsApp us if you have any questions.</p>
       <a href="https://wa.me/918160050554" class="cta">💬 Chat on WhatsApp</a>
-      <p style="font-size:13px;color:#94A3B8;">No spam. No hidden charges. 100% free assessment.</p>
+      <p style="font-size:13px;color:#94A3B8;">No spam. No hidden charges. 100% free consultation.</p>
     </div>
-    <div class="ftr">© 2026 Visa Buddies • Gujarat, India<br>info@visabuddies.in • +91 81600 50554</div>
+    <div class="ftr">© 2026 Visa Buddies • Gujarat, India<br>www.visa-buddies.com • +91 81600 50554</div>
   </div>
 </body>
 </html>`;
 }
 
-// ── handler ───────────────────────────────────────────────────────
 export async function handler(event) {
-  // CORS preflight
   if (event.httpMethod === "OPTIONS") {
     return { statusCode: 204, headers: CORS, body: "" };
   }
-
   if (event.httpMethod !== "POST") {
     return respond(405, { error: "Method not allowed." });
   }
 
-  const apiKey = process.env.RESEND_API_KEY;
-  if (!apiKey) {
-    console.error("RESEND_API_KEY is not set.");
-    return respond(500, { error: "Server configuration error." });
+  const gmailUser = process.env.GMAIL_USER;
+  const gmailPass = process.env.GMAIL_PASS;
+  if (!gmailUser || !gmailPass) {
+    console.error("GMAIL_USER or GMAIL_PASS env vars not set.");
+    return respond(500, { error: "Server configuration error. Please contact us directly." });
   }
 
   let data;
   try {
     data = JSON.parse(event.body || "{}");
   } catch {
-    return respond(400, { error: "Invalid JSON body." });
+    return respond(400, { error: "Invalid request." });
   }
 
-  // Honeypot check — bots fill the hidden company field
-  if (data.company) {
-    return respond(200, { ok: true }); // silent fake success
-  }
+  // Honeypot — bots fill hidden company field
+  if (data.company) return respond(200, { ok: true });
 
   const validationError = validatePayload(data);
-  if (validationError) {
-    return respond(400, { error: validationError });
-  }
+  if (validationError) return respond(400, { error: validationError });
+
+  // Create Gmail transporter
+  const transporter = nodemailer.createTransport({
+    service: "gmail",
+    auth: { user: gmailUser, pass: gmailPass },
+  });
 
   try {
-    // Staff notification (required — fail if this doesn't go through)
-    const staffRes = await fetch("https://api.resend.com/emails", {
-      method: "POST",
-      headers: { "Content-Type": "application/json", Authorization: `Bearer ${apiKey}` },
-      body: JSON.stringify({
-        from:    "Visa Buddies <onboarding@resend.dev>",
-        to:      [TEST_EMAIL || "hetpatel2130@gmail.com"],
-        subject: `📋 New Consultation — ${data.name} (${data.visa})`,
-        html:    buildStaffEmail(data),
-      }),
+    // 1. Staff notification
+    await transporter.sendMail({
+      from: `"Visa Buddies" <${gmailUser}>`,
+      to:   gmailUser,
+      subject: `📋 New Consultation — ${data.name} (${data.visa})`,
+      html: buildStaffEmail(data),
     });
 
-    if (!staffRes.ok) {
-      const staffErr = await staffRes.text();
-      console.error("Resend staff email error:", staffErr);
-      return respond(502, { error: "Failed to send emails. Please try again." });
-    }
-
-    // Client confirmation — best-effort, don't fail the whole submission if Resend
-    // blocks it (common on free plan when domain isn't yet verified).
-    fetch("https://api.resend.com/emails", {
-      method: "POST",
-      headers: { "Content-Type": "application/json", Authorization: `Bearer ${apiKey}` },
-      body: JSON.stringify({
-        from:    "Visa Buddies <onboarding@resend.dev>",
-        to:      [TEST_EMAIL || data.email],
-        subject: "✅ Your Visa Consultation is Confirmed — Visa Buddies",
-        html:    buildClientEmail(data),
-      }),
-    }).catch((e) => console.warn("Client confirmation email failed (non-fatal):", e));
+    // 2. Client confirmation (best-effort — don't fail if client email bounces)
+    transporter.sendMail({
+      from:    `"Visa Buddies" <${gmailUser}>`,
+      to:      data.email,
+      replyTo: gmailUser,
+      subject: "✅ Your Visa Consultation is Confirmed — Visa Buddies",
+      html:    buildClientEmail(data),
+    }).catch((e) => console.warn("Client confirmation failed (non-fatal):", e.message));
 
     return respond(200, { ok: true });
   } catch (err) {
-    console.error("Unexpected error:", err);
-    return respond(500, { error: "Internal server error." });
+    console.error("Gmail send error:", err.message);
+    return respond(502, { error: "Failed to send email. Please try again or contact us on WhatsApp." });
   }
 }
