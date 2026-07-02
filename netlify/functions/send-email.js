@@ -145,6 +145,8 @@ export async function handler(event) {
     return respond(500, { error: "Server configuration error. Please contact us directly." });
   }
 
+  console.log("Using Gmail account:", gmailUser);
+
   let data;
   try {
     data = JSON.parse(event.body || "{}");
@@ -156,31 +158,48 @@ export async function handler(event) {
   if (data.company) return respond(200, { ok: true });
 
   const validationError = validatePayload(data);
-  if (validationError) return respond(400, { error: validationError });
+  if (validationError) {
+    console.log("Validation failed:", validationError);
+    return respond(400, { error: validationError });
+  }
 
   // Create Gmail transporter
   const transporter = nodemailer.createTransport({
-    service: "gmail",
+    host: "smtp.gmail.com",
+    port: 465,
+    secure: true,
     auth: { user: gmailUser, pass: gmailPass },
   });
 
+  // Verify connection before sending
+  try {
+    await transporter.verify();
+    console.log("Gmail SMTP connection verified OK");
+  } catch (verifyErr) {
+    console.error("Gmail SMTP verify failed:", verifyErr.message);
+    return respond(502, { error: "Failed to send email. Please try again or contact us on WhatsApp." });
+  }
+
   try {
     // 1. Staff notification
-    await transporter.sendMail({
+    const staffInfo = await transporter.sendMail({
       from: `"Visa Buddies" <${gmailUser}>`,
       to:   "hetpatel2130@gmail.com",
       subject: `📋 New Consultation — ${data.name} (${data.visa})`,
       html: buildStaffEmail(data),
     });
+    console.log("Staff email sent:", staffInfo.messageId);
 
-    // 2. Client confirmation (best-effort — don't fail if client email bounces)
+    // 2. Client confirmation
     transporter.sendMail({
       from:    `"Visa Buddies" <${gmailUser}>`,
       to:      data.email,
       replyTo: "hetpatel2130@gmail.com",
       subject: "✅ Your Visa Consultation is Confirmed — Visa Buddies",
       html:    buildClientEmail(data),
-    }).catch((e) => console.warn("Client confirmation failed (non-fatal):", e.message));
+    })
+    .then((info) => console.log("Client email sent:", info.messageId))
+    .catch((e) => console.warn("Client confirmation failed (non-fatal):", e.message));
 
     return respond(200, { ok: true });
   } catch (err) {
